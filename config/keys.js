@@ -1,5 +1,5 @@
 // determine whether we need production or dev keys
-if (process.env.NODE_ENV === 'product') {
+if (process.env.NODE_ENV === 'production') {
 	// in prod
 	module.exports = require('./prod');
 }
