@@ -36,7 +36,8 @@ passport.use(
             else {  //create new user
                 new User({
                     googleId: profile.id,
-                    name: profile.displayName
+                    name: profile.displayName,
+                    admin: false
                 }).save().then(user => done(null, user));
             }
         });
@@ -62,7 +63,8 @@ passport.use(new SlackStrategy({
           else {
               new User({
                   slackId : profile.id,
-                  name: profile.user.name
+                  name: profile.user.name,
+                  admin: false
               }).save().then(user => done(null, user));
           }
       });
