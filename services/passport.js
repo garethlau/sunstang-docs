@@ -27,24 +27,25 @@ passport.use(
       clientSecret: keys.googleClientSecret,
       callbackURL: '/auth/google/callback',
     },
-    (accessToken, refreshToken, profile, done) => {
-        User.findOne({ googleId: profile.id }).then((existingUser) => {
-            if (existingUser) {
-                //user already exists
-                done(null, existingUser);
-            }
-            else {  //create new user
-                new User({
-                    googleId: profile.id,
-                    name: profile.displayName,
-                    admin: false
-                }).save().then(user => done(null, user));
-            }
-        });
-            console.log('accessToken', accessToken);
-            console.log('refresh token', refreshToken);
-            console.log('profile', profile);
+    async (accessToken, refreshToken, profile, done) => {
+        const existingUser = await User.findOne({ googleId: profile.id })
+        if (existingUser) {
+            //user already exists
+            done(null, existingUser);
         }
+        else {  //create new user
+            const user = await new User({
+                googleId: profile.id,
+                name: profile.displayName,
+                admin: false
+            }).save()
+            done(null, user);
+        }
+
+        console.log('accessToken', accessToken);
+        console.log('refresh token', refreshToken);
+        console.log('profile', profile);
+    }
 ));
 
 // slack strategy
@@ -53,21 +54,22 @@ passport.use(new SlackStrategy({
     clientSecret: keys.slackClientSecret,
     skipUserProfile: false,
   },
-  (accessToken, refreshToken, profile, done) => {
+  async (accessToken, refreshToken, profile, done) => {
     //passport callback function
-      User.findOne({ slackId : profile.id}).then((existingUser) => {
-          if (existingUser) {
-              //user already exists
-              done(null, existingUser);
-          }
-          else {
-              new User({
-                  slackId : profile.id,
-                  name: profile.user.name,
-                  admin: false
-              }).save().then(user => done(null, user));
-          }
-      });
+      const existingUser = await User.findOne({ slackId : profile.id})
+      if (existingUser) {
+          //user already exists
+          done(null, existingUser);
+      }
+      else {
+          // create a new profile
+          const user = new User({
+              slackId : profile.id,
+              name: profile.user.name,
+              admin: false
+          }).save()
+          done(null, user);
+      }
         console.log('accessToken', accessToken);
         console.log('refreshToken', refreshToken);
         console.log('profile', profile);
