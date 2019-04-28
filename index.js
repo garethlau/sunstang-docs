@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 // import files
 const keys = require('./config/keys');
 require('./models/user.js');
+require('./models/page.js');
 require('./services/passport.js');
 
 // connect to database
