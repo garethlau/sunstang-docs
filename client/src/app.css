@@ -1,0 +1,56 @@
+.editor-container {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.button-container {
+    position: fixed;
+    left: 0;
+    top: 20%;
+    background-color: grey;
+}
+.style-button, .RichEditor-styleButton button {
+    background-color: transparent;
+    border: none;
+    font-size: 1em;
+    padding-bottom: 10px;
+}
+.btn {
+
+}
+.edit-area {
+    background-color: #fffef7;
+    margin:auto;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+    min-height: 80vh;
+    /*overflow-y: scroll; */
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+div.DraftEditor-root {
+    /* CSS to affect only the editor, not the title */
+}
+input.page-title {
+    border: 0;
+    font-size: 2em;
+    outline-width: 0;
+}
+div.DraftEditor-root span span{
+    /* CSS to affect the blocks */
+
+    display: block;
+    background-color: white;
+}
+
+.fancyBlockquote {
+  color: #999;
+  font-family: 'Hoefler Text', Georgia, serif;
+  font-style: italic;
+  text-align: center;
+}
+.code {
+    margin-top: 0;
+    margin-bottom: 0;    
+}

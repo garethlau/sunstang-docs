@@ -15,24 +15,33 @@ class PageEdittor extends Component {
             editorState: EditorState.createEmpty(),
             isLoaded: false
         }
-        this.onChange = (editorState) => {
-            console.log("in th onchange", editorState)
-            this.getContentStateInJSON();
-            this.setState({
-                editorState
-            });
-
-        }
+    }
+    componentDidMount() {
+        this.setState({
+            data: "helloooooo"
+        })
     }
 
-    getContentStateInJSON = () => {
-        const rawJson = convertToRaw( this.state.editorState.getCurrentContent() );
-        const jsonStr = JSON.stringify(rawJson, null, 1);
+    onChange = (editorState) => {
+        console.log("in th onchange", editorState)
+        this.setState({
+            editorState
+        });
+        this.getContentStateInJSON(editorState);
 
-        this.setState({ data: jsonStr });
-        console.log(this.state.data);
+    }
+    toggleBlockType = (blockType) => {
+        console.log("Block type is", blockType);
+        this.onChange(RichUtils.toggleBlockType(this.state.editorState, blockType));
+     };
+     getContentStateInJSON = (editorState) => {
+         const rawJson = convertToRaw( editorState.getCurrentContent() );
+         const jsonStr = JSON.stringify(rawJson, null, 1);
 
-    };
+         this.setState({ data: jsonStr });
+         console.log("in get content state", convertToRaw(editorState.getCurrentContent()));
+
+     };
 
     handleKeyCommand = (command) => {
         const newState = RichUtils.handleKeyCommand(this.state.editorState, command)
@@ -55,10 +64,7 @@ class PageEdittor extends Component {
       this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'ITALIC'))
     }
 
-    toggleBlockType = (blockType) => {
-        console.log("Block type is", blockType);
-        this.onChange(RichUtils.toggleBlockType(this.state.editorState, blockType));
-     };
+
 
      handleTitle = (event) => {
          this.setState({
@@ -106,12 +112,14 @@ class PageEdittor extends Component {
         else {
             const title = this.state.title;
             return(
-                <>
-                    <input value={title} onChange={this.handleTitle}/>
-                    <button onClick={this.onUnderlineClick}>U</button>
-                    <button onClick={this.onBoldClick}><b>B</b></button>
-                    <button onClick={this.onItalicClick}><em>I</em></button>
-                    <BlockStyleToolbar editorState={this.state.editorState} onToggle={this.toggleBlockType}/>
+                <div className="editor-container">
+                    <input className="page-title" value={title} onChange={this.handleTitle}/>
+                    <div className="button-container">
+                        <button className="style-button" onClick={this.onUnderlineClick}>U</button>
+                        <button className="style-button" onClick={this.onBoldClick}><b>B</b></button>
+                        <button className="style-button" onClick={this.onItalicClick}><em>I</em></button>
+                        <BlockStyleToolbar editorState={this.state.editorState} onToggle={this.toggleBlockType}/>
+                    </div>
                     <Editor
                       editorState={this.state.editorState}
                       handleKeyCommand={this.handleKeyCommand}
@@ -123,7 +131,7 @@ class PageEdittor extends Component {
                       spellCheck={true}
                     />
                     <button onClick={this.save}>Save</button>
-                  </>
+                  </div>
             );
         }
     }
