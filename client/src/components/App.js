@@ -23,7 +23,7 @@ class App extends Component {
             <>
                 <BrowserRouter>
                     <>
-                        <Route path="/" component={Header}/>
+                        <Route exact={true} path="/" component={Header}/>
                         <Route exact={true} path="/" component={Landing}/>
                         <Route path="/docs" component={Page} />
 
