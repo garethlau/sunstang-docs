@@ -148,6 +148,9 @@ class PageCreator extends Component {
 		}
 		else {
 			// page already exists
+			// todo
+			// this route is showing up as localhost:3000/api/update-page
+			// 413 error, payload to large
 			path = "/api/update-page/" + this.state.pageId;
 		}
 		axios.post(path, page);
