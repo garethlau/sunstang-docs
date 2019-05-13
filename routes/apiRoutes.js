@@ -25,6 +25,8 @@ module.exports = app => {
                 console.log("api got page", page);
                 res.send(page);
             }
+        }).catch((err) => {
+            console.log("Error getting page", err);
         })
     });
 
@@ -39,7 +41,7 @@ module.exports = app => {
             new Page({
                 authorId: req.user._id,
                 title: page.title,
-                content: page.data,
+                content: page.blocks,
                 inEdit: false
             }).save().then((page) => {
                 console.log("Page saved...", page);
@@ -49,8 +51,9 @@ module.exports = app => {
             // this page already exists
             console.log("page already exists");
             Page.findById(pageId).then((newPage) => {
+                console.log("newPage", newPage);
                 newPage.title = page.title;
-                newPage.content = page.data;
+                newPage.content = page.blocks;
                 newPage.save().then(() => {
                     res.send(newPage)
                 }).catch(err => console.log("err", err));

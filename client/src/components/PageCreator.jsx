@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import axios from 'axios';
 // import draft plugins
 import { AtomicBlockUtils, convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import Editor, { createEditorStateWithText, composeDecorators } from 'draft-js-plugins-editor';
@@ -61,51 +61,42 @@ const plugins = [
 ];
 // the default text that is shown
 const text = 'Once you click into the text field the sidebar plugin will show up …';
-const initialState = {
-    "entityMap": {
-        "0": {
-            "type": "IMAGE",
-            "mutability": "IMMUTABLE",
-            "data": {
-                "src": "/rooster.jpg"
-            }
-        }
-    },
-    "blocks": [{
-        "key": "9gm3s",
-        "text": "You can have images in your text field. This is a very rudimentary example, but you can enhance the image plugin with resizing, focus or alignment plugins.",
-        "type": "unstyled",
-        "depth": 0,
-        "inlineStyleRanges": [],
-        "entityRanges": [],
-        "data": {}
-    }, {
-        "key": "ov7r",
-        "text": " ",
-        "type": "atomic",
-        "depth": 0,
-        "inlineStyleRanges": [],
-        "entityRanges": [{
-            "offset": 0,
-            "length": 1,
-            "key": 0
-        }],
-        "data": {}
-    }, {
-        "key": "e23a8",
-        "text": "See advanced examples further down …",
-        "type": "unstyled",
-        "depth": 0,
-        "inlineStyleRanges": [],
-        "entityRanges": [],
-        "data": {}
-    }]
-};
+
 class PageCreator extends Component {
 	state = {
 		//editorState: createEditorStateWithText(text)
-		editorState: EditorState.createWithContent(convertFromRaw(initialState))
+		editorState: createEditorStateWithText(text),
+		pageTitle: " ",
+		pageId: null
 	};
+	componentDidMount() {
+		if (this.props.location.pathname.split('/').length === 4) {
+			// a page id was provided in the url
+			const pageId = (this.props.location.pathname).split('/')[3];
+	        const path = "/api/get-page/" + pageId;
+	        axios.get(path).then((res) => {
+	        	console.log(res);
+	            this.setState({
+			        pageTitle: res.data.title,
+			        authorId: res.data.authorId,
+		            editorState: EditorState.push(this.state.editorState, convertFromRaw(res.data.content), 'change-block-data'),
+		            pageId: res.data._id
+		        })
+	        })
+		}
+		else {
+			// new page
+			axios.get('/api/current-user').then((res) => {
+				console.log("res is", res);
+				const authorId = res.data._id;
+				console.log(authorId);
+				this.setState({
+					authorId: authorId,
+				})
+			})
+		}
+
+	}
 	onChange = (editorState) => {
 		this.setState({editorState})
 	};
@@ -135,20 +126,45 @@ class PageCreator extends Component {
 		});
 		return AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' ');
 	};
-	getCurrentContent = () => {
+	onTitleChange = (event) => {
+		this.setState({pageTitle: event.target.value})
+	};
+	savePage = () => {
 		// logic for saving
-		let raw = convertToRaw(this.state.editorState.getCurrentContent());
-		console.log(raw);
-	}
+		let pageTitle = this.state.pageTitle;
+		console.log("Page title is", pageTitle);
+		let rawPageContent = convertToRaw(this.state.editorState.getCurrentContent());
+		let page = {
+			title: pageTitle,
+			blocks: rawPageContent
+		};
+		console.log("Page is: ", page);
+		// add a .then() here to notify that the page has been saved
+		// or redirect
+		let path;
+		if (this.state.pageId === null) {
+			// no page id, this is a new page
+			path = "/api/update-page";
+		}
+		else {
+			// page already exists
+			path = "/api/update-page/" + this.state.pageId;
+		}
+		axios.post(path, page);
+
+	};
 	render() {
 		return(
-			<div onClick={this.focus} className={editorStyles.editor}>
-				<Editor
-					editorState={this.state.editorState}
-					onChange={this.onChange}
-					plugins={plugins}
-					ref={(element) => {this.editor = element}}
-				/>
+			<div className={editorStyles.editorContainer}>
+				<input type={"text"} placeholder={"Page Title"} value={this.state.pageTitle} onChange={this.onTitleChange}/>
+				<div onClick={this.focus} className={editorStyles.editor}>
+					<Editor
+						editorState={this.state.editorState}
+						onChange={this.onChange}
+						plugins={plugins}
+						ref={(element) => {this.editor = element}}
+					/>
+				</div>
 				<AlignmentTool/>
 				<Toolbar>
 					{
@@ -167,8 +183,8 @@ class PageCreator extends Component {
 						)
 					}
 				</Toolbar>
-				<input type="file" name="file" onChange={this.fileHandler} data-multiple-caption="some message"/>
-				<button value="nice" onClick={this.getCurrentContent}/>
+				<input type="file" name="file" onChange={this.fileHandler}/>
+				<button onClick={this.savePage}>Save</button>
 			</div>
 		);
 	}
