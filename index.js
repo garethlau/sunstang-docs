@@ -47,11 +47,11 @@ require('./routes/devRoutes')(app);
 
 // set dynamic ports
 const PORT =  process.env.PORT || 5000;
-const environment = process.env.ENV || 'dev';
+const environment = process.env.NODE_ENV || 'dev';
 
 if (environment === "dev"){
     console.log("\x1b[31m", "ENVIRONMENT IS DEV - ENSURE THAT THIS IS NOT SHOWING WHEN DEPLOYED", "\x1b[0m");
-} else if (environment === "prod") {
+} else if (environment === "production") {
     console.log("\x1b[34m", "RUNNING IN PRODUCTION", "\x1b[0m")
 }
 
