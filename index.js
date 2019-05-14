@@ -45,6 +45,7 @@ require('./routes/authRoutes')(app);
 require('./routes/apiRoutes')(app);
 require('./routes/devRoutes')(app);
 
+
 // set dynamic ports
 const PORT =  process.env.PORT || 5000;
 const environment = process.env.NODE_ENV || 'dev';
@@ -52,7 +53,14 @@ const environment = process.env.NODE_ENV || 'dev';
 if (environment === "dev"){
     console.log("\x1b[31m", "ENVIRONMENT IS DEV - ENSURE THAT THIS IS NOT SHOWING WHEN DEPLOYED", "\x1b[0m");
 } else if (environment === "production") {
-    console.log("\x1b[34m", "RUNNING IN PRODUCTION", "\x1b[0m")
+    console.log("\x1b[34m", "RUNNING IN PRODUCTION", "\x1b[0m");
+    // make sure express serves production assets
+    app.use(express.static('client/build'));
+    // make sure express serves index.html if it doesn't know the route
+    const path = require('path');
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
 }
 
 // tell express to listen to the port
