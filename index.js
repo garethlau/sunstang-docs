@@ -12,6 +12,17 @@ require('./models/page.js');
 require('./services/passport.js');
 
 // connect to database
+mongoose.connect(keys.mongoURI, {
+    auth: {
+        user: keys.mongoUser,
+        password: keys.mongoPassword
+    }, useNewUrlParser:true
+})
+    .then(() => console.log("Successfully connected to mongo"))
+    .catch((err) => console.log("There was an error connecting to mongo", err));
+
+/*
+For local connection
 mongoose.connect('mongodb://localhost/nodekb', {
     useNewUrlParser: true
 });
@@ -24,6 +35,7 @@ db.on('open', () => console.log("successfully connected to mongo"));
 db.on('error', (err) => {
     console.log("err connecting to mongo", err)
 })
+*/
 
 // initialize the app
 const app = express();
