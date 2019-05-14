@@ -62,7 +62,7 @@ const plugins = [
 // the default text that is shown
 const text = 'Once you click into the text field the sidebar plugin will show up …';
 
-class PageCreator extends Component {
+class PageEditor extends Component {
 	state = {
 		//editorState: createEditorStateWithText(text)
 		editorState: createEditorStateWithText(text),
@@ -73,13 +73,15 @@ class PageCreator extends Component {
 		if (this.props.location.pathname.split('/').length === 4) {
 			// a page id was provided in the url
 			const pageId = (this.props.location.pathname).split('/')[3];
+			console.log("Page id was provided: ", pageId);
 	        const path = "/api/get-page/" + pageId;
 	        axios.get(path).then((res) => {
-	        	console.log(res);
+	        	console.log("res is", res);
+	        	console.log("res.data.content is", res.data.content);
 	            this.setState({
 			        pageTitle: res.data.title,
 			        authorId: res.data.authorId,
-		            editorState: EditorState.push(this.state.editorState, convertFromRaw(res.data.content), 'change-block-data'),
+		            editorState: EditorState.push(this.state.editorState, convertFromRaw(JSON.parse(res.data.content)), 'change-block-data'),
 		            pageId: res.data._id
 		        })
 	        })
@@ -89,7 +91,7 @@ class PageCreator extends Component {
 			axios.get('/api/current-user').then((res) => {
 				console.log("res is", res);
 				const authorId = res.data._id;
-				console.log(authorId);
+				console.log("Author ID is: ", authorId);
 				this.setState({
 					authorId: authorId,
 				})
@@ -133,10 +135,10 @@ class PageCreator extends Component {
 		// logic for saving
 		let pageTitle = this.state.pageTitle;
 		console.log("Page title is", pageTitle);
-		let rawPageContent = convertToRaw(this.state.editorState.getCurrentContent());
+		let JsonPageContent = JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()));
 		let page = {
 			title: pageTitle,
-			blocks: rawPageContent
+			blocks: JsonPageContent
 		};
 		console.log("Page is: ", page);
 		// add a .then() here to notify that the page has been saved
@@ -193,4 +195,4 @@ class PageCreator extends Component {
 	}
 }
 
-export default PageCreator;
+export default PageEditor;

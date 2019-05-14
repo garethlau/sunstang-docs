@@ -1,31 +1,76 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {fetchPage} from '../actions';
+import axios from "axios";
+import {convertFromRaw, EditorState} from "draft-js";
+
+import Loader from './Loader';
 
 class Page extends Component {
+	state ={
+		isLoaded: false
+	};
+	componentDidMount() {
+		console.log(this.props.location.pathname.split('/'));
+		if (this.props.location.pathname.split('/').length === 4) {
+			// a page id was provided in the url
+			const pageId = (this.props.location.pathname).split('/')[3];
+			console.log("Page id was provided: ", pageId);
+	        const path = "/api/get-page/" + pageId;
+	        axios.get(path).then((res) => {
+	        	console.log("res is", res);
+	        	console.log("res.data.content is", JSON.parse(res.data.content));
+	            this.setState({
+		            isLoaded: true,
+			        pageTitle: res.data.title,
+			        authorId: res.data.authorId,
+		            content: JSON.parse(res.data.content),
+		            pageId: res.data._id
+		        })
+	        })
+		}
+		else {
+			// user shouldn't access this route without a page ID
+		}
+	}
+	renderTitle = () => {
+		if (this.state.isLoaded) {
+			return (
+				<h1>{this.state.pageTitle}</h1>
+			)
+		}
+		else {
+			return (
+				<h1>Default Header</h1>
+			)
+		}
+	};
+	renderBlocks = () => {
+		if (this.state.isLoaded) {
+			console.log("Loaded");
+			return this.state.content.blocks.map((block) => {
+				console.log("block.text is", block.text);
+				return(
+					<div key={block.key}>
+						{block.text}
+					</div>
+				)
+			})
+		}
+		else {
+			// blocks not loaded
+			console.log("Not loaded");
+			return(
+				<Loader/>
+			)
+		}
+	};
 
-    componentDidMount() {
-        const pageId = (this.props.location.pathname).split('/')[2];
-        console.log(pageId);
-        this.props.fetchPage(pageId);
-        console.log(this.props.pages);
-
-    }
-
-    render() {
-
-        const {title, content} = this.props.pages
-        console.log(content);
-        return(
-            <div>
-                {title}
-            </div>
-        )
-    }
+	render() {
+		return(
+			<div>
+				{this.renderTitle()}
+				{this.renderBlocks()}
+			</div>
+		)
+	}
 }
-
-function mapStateToProps(state) {
-    return({pages: state.pages})
-}
-
-export default connect(mapStateToProps, {fetchPage})(Page);
+export default Page;

@@ -21,7 +21,7 @@ class EditPagesDriver extends Component {
                     </div>
                 </Link>
             )
-        })
+        });
 
 
 
@@ -29,7 +29,7 @@ class EditPagesDriver extends Component {
             <>
                 hi from document driver
                 {titlesArray}
-                <Link to="/edit/new-page">Create new page</Link>
+                <Link to="/edit/page">Create new page</Link>
             </>
         )
     }

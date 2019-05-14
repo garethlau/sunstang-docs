@@ -9,13 +9,13 @@ import * as actions from '../actions';
 
 // components for edditting
 import EditPagesDriver from './EditPagesDriver';
-import PageCreator from './PageCreator';
-import PageEdittor from './PageEdittor';
+import PageEditor from './PageEditor';
 
 
+import PageDriver from './PageDriver';
 import Page from './Page';
-const Header = () => <h2>Header</h2>
-const Landing = () => <h2>Landing</h2>
+const Header = () => <h2>Header</h2>;
+const Landing = () => <h2>Landing</h2>;
 
 class App extends Component {
     render() {
@@ -25,12 +25,12 @@ class App extends Component {
                     <>
                         <Route exact={true} path="/" component={Header}/>
                         <Route exact={true} path="/" component={Landing}/>
-                        <Route path="/docs" component={Page} />
+                        <Route exact={true}  path="/docs" component={PageDriver} />
+                        <Route path="/docs/page" component={Page}/>
 
 
                         <Route exact={true} path="/edit" component={EditPagesDriver}/>
-                        <Route path="/edit/new-page" component={PageCreator}/>
-                        <Route path="/edit/page" component={PageEdittor} />
+                        <Route path="/edit/page" component={PageEditor}/>
                     </>
                 </BrowserRouter>
             </>
