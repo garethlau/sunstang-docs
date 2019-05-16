@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import {Link} from 'react-router-dom';
+import axios from 'axios';
 
+// import components
 import Loader from './Loader';
 
 class PageDriver extends Component {
@@ -18,6 +19,7 @@ class PageDriver extends Component {
             });
         })
     }
+
     renderPageTitles = () => {
         if (this.state.isLoaded) {
             // got the page titles

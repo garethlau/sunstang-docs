@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {FETCH_USER, FETCH_PAGES, SAVE_PAGE} from './types';
+import {FETCH_USER, FETCH_PAGES} from './types';
 
 // fetch current user data
 export const fetchUser = () => async dispatch => {

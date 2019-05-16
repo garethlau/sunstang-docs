@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import axios from 'axios';
 // import draft plugins
 import { AtomicBlockUtils, convertFromRaw, convertToRaw, EditorState } from "draft-js";
@@ -30,6 +31,9 @@ import editorStyles from '../styles/editorStyles.module.css';
 import buttonStyles from '../styles/buttonStyles.module.css';
 import toolbarStyles from '../styles/toolbarStyles.module.css';
 import 'draft-js-alignment-plugin/lib/plugin.css';
+
+// components
+import Login from './Login';
 
 // plugin config
 const toolbarPlugin = createToolbarPlugin({
@@ -158,7 +162,23 @@ class PageEditor extends Component {
 		axios.post(path, page);
 
 	};
-	render() {
+	// enforce login
+	gateKeeper = () => {
+		if (this.props.auth) {
+			return (
+				<>
+					{this.renderContent()}
+				</>
+			)
+		}
+		else {
+			return (
+				<Login/>
+			)
+		}
+	};
+
+	renderContent = () => {
 		return(
 			<div className={editorStyles.editorContainer}>
 				<input type={"text"} placeholder={"Page Title"} value={this.state.pageTitle} onChange={this.onTitleChange}/>
@@ -193,6 +213,18 @@ class PageEditor extends Component {
 			</div>
 		);
 	}
-}
 
-export default PageEditor;
+	render() {
+		return (
+			<div>
+				{this.gateKeeper()}
+			</div>
+		)
+	}
+}
+function mapStateToProps(state) {
+	return ({
+		auth: state.auth
+	})
+}
+export default connect(mapStateToProps)(PageEditor);

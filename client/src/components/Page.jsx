@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from "axios";
-import {convertFromRaw, EditorState} from "draft-js";
 
+// import components
 import Loader from './Loader';
 
 class Page extends Component {

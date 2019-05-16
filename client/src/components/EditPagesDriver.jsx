@@ -3,17 +3,36 @@ import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {fetchPages} from '../actions';
 
-class EditPagesDriver extends Component {
+// components
+import Login from './Login';
 
+class EditPagesDriver extends Component {
 
     componentDidMount() {
         this.props.fetchPages();
     }
 
-    render() {
+    // enforce login
+    gateKeeper = () => {
+        if (this.props.auth) {
+            // user is logged in
+            return (
+                <>
+                    {this.renderContent()}
+                </>
+            )
+        }
+        else {
+            return (
+                <Login/>
+            )
+        }
+    };
+
+    renderContent = () => {
         console.log(this.props.pages);
         const titlesArray = this.props.pages.map(page => {
-            let pagePath = "/edit/page/" + page._id
+            let pagePath = "/edit/page/" + page._id;
             return(
                 <Link to={pagePath}>
                     <div>
@@ -23,8 +42,6 @@ class EditPagesDriver extends Component {
             )
         });
 
-
-
         return(
             <>
                 hi from document driver
@@ -32,11 +49,23 @@ class EditPagesDriver extends Component {
                 <Link to="/edit/page">Create new page</Link>
             </>
         )
+    };
+
+    render() {
+        return (
+            <div>
+                {this.gateKeeper()}
+            </div>
+        )
     }
 }
 
 function mapStateToProps(state) {
-    return({pages: state.pages})
+    // this component has access to the global piece of state that includes auth
+    return({
+        auth: state.auth,
+        pages: state.pages
+    })
 }
 
 export default connect(mapStateToProps, {fetchPages})(EditPagesDriver);
