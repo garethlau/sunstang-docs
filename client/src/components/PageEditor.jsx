@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
+import {Route} from 'react-router-dom';
+
 // import draft plugins
 import { AtomicBlockUtils, convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import Editor, { createEditorStateWithText, composeDecorators } from 'draft-js-plugins-editor';
@@ -34,6 +36,7 @@ import 'draft-js-alignment-plugin/lib/plugin.css';
 
 // components
 import Login from './Login';
+import Loader from './Loader';
 
 // plugin config
 const toolbarPlugin = createToolbarPlugin({
@@ -67,6 +70,7 @@ const plugins = [
 const text = 'Once you click into the text field the sidebar plugin will show up …';
 
 class PageEditor extends Component {
+	_isMounted = false;     // prevent the setting of state when the component is not mounted
 	state = {
 		//editorState: createEditorStateWithText(text)
 		editorState: createEditorStateWithText(text),
@@ -74,6 +78,7 @@ class PageEditor extends Component {
 		pageId: null
 	};
 	componentDidMount() {
+		this._isMounted = true;
 		if (this.props.location.pathname.split('/').length === 4) {
 			// a page id was provided in the url
 			const pageId = (this.props.location.pathname).split('/')[3];
@@ -82,12 +87,14 @@ class PageEditor extends Component {
 	        axios.get(path).then((res) => {
 	        	console.log("res is", res);
 	        	console.log("res.data.content is", res.data.content);
-	            this.setState({
-			        pageTitle: res.data.title,
-			        authorId: res.data.authorId,
-		            editorState: EditorState.push(this.state.editorState, convertFromRaw(JSON.parse(res.data.content)), 'change-block-data'),
-		            pageId: res.data._id
-		        })
+	        	if (this._isMounted) {      // only set state if component is mounted
+			        this.setState({
+				        pageTitle: res.data.title,
+				        authorId: res.data.authorId,
+				        editorState: EditorState.push(this.state.editorState, convertFromRaw(JSON.parse(res.data.content)), 'change-block-data'),
+				        pageId: res.data._id
+			        })
+		        }
 	        })
 		}
 		else {
@@ -96,15 +103,24 @@ class PageEditor extends Component {
 				console.log("res is", res);
 				const authorId = res.data._id;
 				console.log("Author ID is: ", authorId);
-				this.setState({
-					authorId: authorId,
-				})
+				if (this._isMounted) {
+					this.setState({
+						authorId: authorId,
+					})
+				}
+
 			})
 		}
 
 	}
+	componentWillUnmount() {
+		this._isMounted = false;
+	}
+
 	onChange = (editorState) => {
-		this.setState({editorState})
+		if (this._isMounted) {
+			this.setState({editorState})
+		}
 	};
 	focus = () => {
 		this.editor.focus();
@@ -117,7 +133,9 @@ class PageEditor extends Component {
 			console.log(reader.result);
 			let base64 = reader.result;
 		    const newEditorState = this.insertImage(this.state.editorState, base64);
-			this.setState({editorState: newEditorState});
+		    if (this._isMounted) {
+                this.setState({editorState: newEditorState});
+		    }
 		};
 		reader.onerror = (error) => {
 			console.log("Error reading the file: ", error);
@@ -133,7 +151,9 @@ class PageEditor extends Component {
 		return AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' ');
 	};
 	onTitleChange = (event) => {
-		this.setState({pageTitle: event.target.value})
+		if (this._isMounted) {
+			this.setState({pageTitle: event.target.value})
+		}
 	};
 	savePage = () => {
 		// logic for saving
@@ -145,38 +165,50 @@ class PageEditor extends Component {
 			blocks: JsonPageContent
 		};
 		console.log("Page is: ", page);
+		console.log("Page id is ", this.state.pageId);
 		// add a .then() here to notify that the page has been saved
 		// or redirect
 		let path;
-		if (this.state.pageId === null) {
+		if (this.state.pageId !== null) {
 			// no page id, this is a new page
-			path = "/api/update-page";
+			path = "/api/update-page?pageId=" + this.state.pageId;
 		}
 		else {
 			// page already exists
-			// todo
-			// this route is showing up as localhost:3000/api/update-page
-			// 413 error, payload to large
-			path = "/api/update-page/" + this.state.pageId;
+			path = "/api/update-page"
 		}
-		axios.post(path, page);
-
+		axios.post(path, page).then(res => {
+			console.log("res after axios.post", res);
+			this.props.history.push('/edit');
+		}).catch(err => {
+			console.log("err", err);
+		});
 	};
+
 	// enforce login
 	gateKeeper = () => {
-		if (this.props.auth) {
-			return (
-				<>
-					{this.renderContent()}
-				</>
-			)
-		}
-		else {
-			return (
-				<Login/>
-			)
-		}
-	};
+        if (this.props.auth) {
+            // user is logged in
+            return (
+                <>
+                    {this.renderContent()}
+                </>
+            )
+        }
+        else if (this.props.auth === null) {
+            // not loaded
+            return (
+                <>
+                    <Loader/>
+                </>
+            )
+        }
+        else {
+            return (
+                <Login/>
+            )
+        }
+    };
 
 	renderContent = () => {
 		return(
@@ -212,7 +244,7 @@ class PageEditor extends Component {
 				<button onClick={this.savePage}>Save</button>
 			</div>
 		);
-	}
+	};
 
 	render() {
 		return (

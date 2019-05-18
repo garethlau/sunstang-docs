@@ -1,9 +1,11 @@
 import {combineReducers} from 'redux';
 import authReducer from './authReducer';
-import pagesReducer from './pagesReducer';
+import pageReducer from './pageReducer';
+import allPagesReducer from './allPagesReducer';
 
 export default combineReducers({
     // link the reducers to a global piece of state
     auth: authReducer,
-    pages: pagesReducer
+    page: pageReducer,
+    allPages: allPagesReducer
 })

@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
 import axios from 'axios';
+import {connect} from 'react-redux';
+
+// import actions
+import {fetchPage} from '../actions';
 
 // import components
 import Loader from './Loader';
+import Page from './Page';
 
 class PageDriver extends Component {
     state = {
@@ -24,12 +28,13 @@ class PageDriver extends Component {
         if (this.state.isLoaded) {
             // got the page titles
             return this.state.pages.map((page) => {
-            	let path = '/docs/page/' + page._id;
-                return(
-                    <div>
-	                    <Link to={path}>
+            	// let path = '/docs/page/' + page._id;
+            	const pageId = page._id;
+                return (
+                    <div key={pageId}>
+	                    <button onClick={() => {this.props.fetchPage(pageId)}}>
                             <p>{page.title}</p>
-	                    </Link>
+	                    </button>
                     </div>
                 )
             })
@@ -44,11 +49,16 @@ class PageDriver extends Component {
 	render() {
         return(
             <div>
+                <Page/>
 	            {this.renderPageTitles()}
             </div>
         )
     }
 }
 
-
-export default PageDriver;
+function mapStateToProps(state) {
+    return ({
+        page: state.page
+    })
+}
+export default connect(mapStateToProps, {fetchPage})(PageDriver);
