@@ -15,8 +15,8 @@ module.exports = app => {
         res.redirect('/')
     });
 
-    app.get('/api/get-page/:pageId', (req, res) => {
-        let pageId = req.params.pageId;
+    app.get('/api/page/', (req, res) => {
+        const pageId = req.query.pageId;
         Page.findById(pageId).then((page, err) => {
             if (err) {
                 console.log("err", err);
@@ -31,9 +31,9 @@ module.exports = app => {
     });
 
 
-    app.post('/api/update-page/', (req, res) => {
-        let pageId = req.query.pageId;
-        let page = req.body;
+    app.post('/api/page/', (req, res) => {
+        const pageId = req.query.pageId;
+        const page = req.body;
         console.log("Page id is:", pageId);
         console.log("page is", page);
         if (pageId === undefined) {
@@ -43,9 +43,10 @@ module.exports = app => {
                 title: page.title,
                 content: page.blocks,
                 inEdit: false
-            }).save().then((page) => {
+            }).save().then((newPage) => {
                 console.log("Page saved...", page);
-            })
+                res.send(newPage);
+            }).catch(err => console.log("err", err));
         }
         else {
             // this page already exists
@@ -55,11 +56,17 @@ module.exports = app => {
                 newPage.title = page.title;
                 newPage.content = page.blocks;
                 newPage.save().then(() => {
-                    res.send(newPage)
+                    res.send(newPage);
                 }).catch(err => console.log("err", err));
             });
         };
+    });
 
+    app.delete('/api/page', (req, res) => {
+        const pageId = req.query.pageId;
+        Page.findByIdAndDelete(pageId).then((deletedPage) => {
+            res.send(deletedPage)
+        }).catch(err => console.log("err", err));
     });
 
 

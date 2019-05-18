@@ -83,7 +83,7 @@ class PageEditor extends Component {
 			// a page id was provided in the url
 			const pageId = (this.props.location.pathname).split('/')[3];
 			console.log("Page id was provided: ", pageId);
-	        const path = "/api/get-page/" + pageId;
+	        const path = "/api/page?pageId=" + pageId;
 	        axios.get(path).then((res) => {
 	        	console.log("res is", res);
 	        	console.log("res.data.content is", res.data.content);
@@ -168,14 +168,15 @@ class PageEditor extends Component {
 		console.log("Page id is ", this.state.pageId);
 		// add a .then() here to notify that the page has been saved
 		// or redirect
+		let pageId = this.state.pageId;
 		let path;
-		if (this.state.pageId !== null) {
+		if (pageId !== null) {
 			// no page id, this is a new page
-			path = "/api/update-page?pageId=" + this.state.pageId;
+			path = "/api/page?pageId=" + pageId;
 		}
 		else {
 			// page already exists
-			path = "/api/update-page"
+			path = "/api/page"
 		}
 		axios.post(path, page).then(res => {
 			console.log("res after axios.post", res);
@@ -184,6 +185,18 @@ class PageEditor extends Component {
 			console.log("err", err);
 		});
 	};
+
+	deletePage = () => {
+		const pageId = this.state.pageId;
+		let path = '/api/page?pageId=' + pageId;
+		axios.delete(path).then(res => {
+			console.log("page deleted, response is ", res);
+			this.props.history.push('/edit');
+		}).catch(err => {
+			// todo should probably have an alert message
+			console.log("err", err);
+		})
+	}
 
 	// enforce login
 	gateKeeper = () => {
@@ -242,6 +255,7 @@ class PageEditor extends Component {
 				</Toolbar>
 				<input type="file" name="file" onChange={this.fileHandler}/>
 				<button onClick={this.savePage}>Save</button>
+				<button onClick={this.deletePage}>Delete this page</button>
 			</div>
 		);
 	};

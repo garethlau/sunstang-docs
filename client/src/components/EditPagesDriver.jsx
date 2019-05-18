@@ -55,7 +55,7 @@ class EditPagesDriver extends Component {
 
         return(
             <>
-                Editor Mode
+                <h1>Editor Mode</h1>
                 {titlesArray}
                 <Link to="/edit/page">Create new page</Link>
             </>
