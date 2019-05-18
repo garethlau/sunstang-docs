@@ -15,7 +15,7 @@ export const fetchAllPages = () => async dispatch => {
 };
 
 export const fetchPage = (pageId) => async dispatch => {
-    const path = '/api/get-page/' + pageId;
+    const path = '/api/page?pageId=' + pageId;
     const res = await axios.get(path);
     // console.log("in fetch SINGLE Page", res);
     dispatch({type: FETCH_PAGE, payload: res.data});
