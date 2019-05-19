@@ -2,16 +2,30 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 
+import axios from 'axios';
+
 import {fetchAllPages} from '../actions';
 
 // components
 import Login from './Login';
 import Loader from './Loader';
+import PageList from './PageList';
 
 class EditPagesDriver extends Component {
 
+    state = {
+        isLoaded: false
+    }
+
     componentDidMount() {
-        this.props.fetchAllPages();
+        axios.get('/api/pages').then(res => {
+            console.log("res in editpages driver", res);
+            const pages = res.data;     // array of pages
+            this.setState({
+                pages: pages,
+                isLoaded: true,
+            });
+        })
     }
 
     // enforce login
@@ -41,7 +55,7 @@ class EditPagesDriver extends Component {
     };
 
     renderContent = () => {
-        console.log(this.props.allPages);
+
         const titlesArray = this.props.allPages.map(page => {
             let pagePath = "/edit/page/" + page._id;
             return(
@@ -53,6 +67,8 @@ class EditPagesDriver extends Component {
             )
         });
 
+
+
         return(
             <>
                 <h1>Editor Mode</h1>
@@ -62,10 +78,27 @@ class EditPagesDriver extends Component {
         )
     };
 
+    renderPageList = () => {
+        // is the data loaded?
+        if (this.state.isLoaded) {
+            return (
+                <PageList pages={this.state.pages}/>
+            )
+        }
+        else {
+            return (
+                <div>
+                    <Loader/>
+                </div>
+            )
+        }     
+    }
+
     render() {
         return (
             <div>
                 {this.gateKeeper()}
+                {this.renderPageList()}
             </div>
         )
     }

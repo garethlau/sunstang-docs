@@ -13,6 +13,9 @@ import PageEditor from './PageEditor';
 import PageDriver from './PageDriver';
 import Page from './Page';
 import Login from './Login';
+import DND from './DND';
+
+
 import PrivateRoute from './PrivateRoute';
 const Header = () => <h2>Header</h2>;
 const Landing = () => <h2>Landing</h2>;
