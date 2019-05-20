@@ -1,0 +1,28 @@
+.viewerContainer {
+    min-height: 100vh;
+}
+.titlesContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    min-height: 100vh;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #707070;
+    background-color: #DADEE2; 
+    padding: 50px 20px 50px 20px;   
+}
+.titlesButton {
+    background-color: transparent;
+    border: none;
+}
+.titlesButton:hover {
+    cursor: pointer;
+}
+.titlesButton > p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.pageContainer {
+    float: left;
+}

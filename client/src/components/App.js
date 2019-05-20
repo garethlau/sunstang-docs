@@ -7,16 +7,19 @@ import '../app.css';
 import * as actions from '../actions';
 import {connect} from 'react-redux';
 
-// components for edditting
-import EditPagesDriver from './EditPagesDriver';
-import PageEditor from './PageEditor';
+// doc viewer components
 import PageDriver from './PageDriver';
 import Page from './Page';
+
+// doc edditor components
+import EditPagesDriver from './EditPagesDriver';
+import PageEditor from './PageEditor';
+
+// routing components
 import Login from './Login';
-import DND from './DND';
+import PrivateRoute from './PrivateRoute';  // not being used, ran into issue of repeated action calls
 
 
-import PrivateRoute from './PrivateRoute';
 const Header = () => <h2>Header</h2>;
 const Landing = () => <h2>Landing</h2>;
 
@@ -28,7 +31,7 @@ class App extends Component {
 
 	render() {
         return(
-            <>
+            <div className="app">
                 <BrowserRouter>
                     <>
                         <Route exact={true} path="/" component={Header}/>
@@ -43,7 +46,7 @@ class App extends Component {
                         <Route path="/edit/page" component={PageEditor}/>
                     </>
                 </BrowserRouter>
-            </>
+            </div>
         )
     }
 }

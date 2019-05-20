@@ -93,6 +93,8 @@ module.exports = app => {
         });
     });
 
+    // reorder pages
+    // this is done by deleting the current pages and then saving an array with the new order
     app.post('/api/pages', (req, res) => {
         //console.log("IN axios.post req is", req.body.data.length);
         Page.deleteMany({}).then((mongoInfo) => {

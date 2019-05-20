@@ -7,7 +7,10 @@ import {fetchPage} from '../actions';
 
 // import components
 import Loader from './Loader';
-import Page from './Page';
+
+// import styling
+import pageViewerStyles from '../styles/pageViewerStyles.module.css';
+import ReadOnlyEditor from './ReadOnlyEditor';
 
 class PageDriver extends Component {
     state = {
@@ -15,6 +18,9 @@ class PageDriver extends Component {
     };
 
     componentDidMount() {
+        const DEFAULT_PAGE_ID = '5ce16d91f4b00a4af0eb5e22';
+        this.props.fetchPage(DEFAULT_PAGE_ID);
+        // load the links to the buttons
         axios.get('/api/pages').then((res) => {
             console.log(res);
             this.setState({
@@ -32,7 +38,7 @@ class PageDriver extends Component {
             	const pageId = page._id;
                 return (
                     <div key={pageId}>
-	                    <button onClick={() => {this.props.fetchPage(pageId)}}>
+	                    <button className={pageViewerStyles.titlesButton} onClick={() => {this.props.fetchPage(pageId)}}>
                             <p>{page.title}</p>
 	                    </button>
                     </div>
@@ -46,11 +52,36 @@ class PageDriver extends Component {
         }
     };
 
+    renderEditor = () => {
+        console.log("props content", this.props.page.content);
+        if (this.props.page.content === undefined) {
+            return (
+                <div>
+                    <Loader/>
+                </div>
+            )
+        }
+        else {
+            const {title, content, authorId} = this.props.page;
+            return (
+                <div>
+                    <ReadOnlyEditor title={title} authorId={authorId} storedState={content}/>
+                </div>
+            )
+        }
+    }
+
 	render() {
+        console.log(this.props.page);
         return(
-            <div>
-                <Page/>
-	            {this.renderPageTitles()}
+            <div className={pageViewerStyles.viewerContainer}>
+                <div className={pageViewerStyles.pageContainer}>
+                    {this.renderEditor()}
+                </div>
+                <div className={pageViewerStyles.titlesContainer}>
+                    Pages
+                    {this.renderPageTitles()}
+                </div>
             </div>
         )
     }

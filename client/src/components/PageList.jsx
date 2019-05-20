@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
-// import actions
 import Axios from 'axios';
 
 // a little function to help us with reordering the result
@@ -28,10 +26,10 @@ class PageList extends Component {
             showSuccessPopup: false
         }
         this.onDragEnd = this.onDragEnd.bind(this);
-
     }
 
-    onDragEnd(result) {
+    // todo change to arrow syntax
+    onDragEnd (result) {
         // dropped outside the list
         if (!result.destination) {
             return;
@@ -76,7 +74,6 @@ class PageList extends Component {
     render() {     
         return (
             <>
-
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="droppable">
                         {(provided, snapshot) => (
