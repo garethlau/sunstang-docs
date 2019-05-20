@@ -5,7 +5,7 @@ const pageSchema = new Schema({
 	authorId: String,
     title: String,
     content: Object,
-    inEdit: Boolean
+    inEdit: Boolean,
 });
 
 module.exports = mongoose.model('pages', pageSchema);

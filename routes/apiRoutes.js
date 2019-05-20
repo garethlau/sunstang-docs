@@ -97,17 +97,20 @@ module.exports = app => {
     // this is done by deleting the current pages and then saving an array with the new order
     app.post('/api/pages', (req, res) => {
         //console.log("IN axios.post req is", req.body.data.length);
-        Page.deleteMany({}).then((mongoInfo) => {
+        Page.deleteMany({}).then(() => {
             const pagesArray = req.body.data;
-            for (i = 0; i < pagesArray.length; i++) {
-                new Page(pagesArray[i]).save().then(savedPage => {
-                    console.log("Page" + (i+1) + "saved: ", savedPage)
+
+            pagesArray.forEach((page) => {
+                new Page(page).save().then(savedPage => {
+                    // for debug
+                    let copy = JSON.stringify(savedPage).slice(0, 100);
+                    console.log(copy);
                 }).catch(err => {
-                    console.log(err)
+                    console.log(err);
                     res.status(statusCodes.INTERNAL_SERVER_ERROR).send(err);
                 });
-            }
-            res.status(statusCodes.OK).send(mongoInfo);
+            })
+            res.status(statusCodes.OK);
         });
     });
 }

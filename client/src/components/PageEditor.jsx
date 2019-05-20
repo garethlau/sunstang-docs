@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
-import {Route} from 'react-router-dom';
 
 // import draft plugins
 import { AtomicBlockUtils, convertFromRaw, convertToRaw, EditorState } from "draft-js";
@@ -94,8 +93,11 @@ class PageEditor extends Component {
 				        editorState: EditorState.push(this.state.editorState, convertFromRaw(JSON.parse(res.data.content)), 'change-block-data'),
 				        pageId: res.data._id
 			        })
-		        }
-	        })
+				}
+				// DELETE THIS
+				console.log("state.editorstate", this.state.editorState);
+			})
+
 		}
 		else {
 			// new page
@@ -226,8 +228,10 @@ class PageEditor extends Component {
 	renderContent = () => {
 		return(
 			<div className={editorStyles.editorContainer}>
-				<input type={"text"} placeholder={"Page Title"} value={this.state.pageTitle} onChange={this.onTitleChange}/>
-				<div onClick={this.focus} className={editorStyles.editor}>
+				<div className={editorStyles.titleContainer}>
+					<input type={"text"} placeholder={"Page Title"} value={this.state.pageTitle} onChange={this.onTitleChange} className={`${editorStyles.title} ${editorStyles.editTitle}`}/>
+				</div>
+				<div onClick={this.focus} className={`${editorStyles.editor} ${editorStyles.scroll}`}>
 					<Editor
 						editorState={this.state.editorState}
 						onChange={this.onChange}

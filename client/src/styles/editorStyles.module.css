@@ -1,21 +1,53 @@
 .editorContainer {
-    width: 60vw;
+    width: 65%;
+    background: #fefefe;
+    padding: 10px 5% 20px 5%;
+}
+.titleContainer {
+  border-width: 0 0 2px 0;
+  border-style: solid;
+  border-color: #707070;
+  margin-bottom: 15px;
+}
+.title {
+  font-size: 3em;
+  font: arial;
+  margin-bottom: 0;
+  margin-top: 5px;
+}
+.editTitle {
+  background: transparent;
+  padding: 0;
+  border: none;
+}
+.editTitle:focus {
+  outline: none;
 }
 
 .editor {
-  box-sizing: border-box;
-  border: 1px solid #ddd;
   cursor: text;
-  padding: 16px;
   border-radius: 2px;
   margin-bottom: 2em;
-  box-shadow: inset 0px 1px 8px -3px #ABABAB;
-  background: #fefefe;
+}
+.scroll {
+  overflow-y: scroll;
   height: 80vh;
   max-height: 90vh;
-  overflow-y: scroll;
+}
+blockquote {
+  font-size: 4em;
+}
+pre > pre {
+  border-style: solid;
+  border-width: 2px;
+  border-color: #707070;
+  padding: 5px 2px 5px 2px;
+}
+.public-DraftStyleDefault-ol {
+  color: green;
 }
 
 .editor :global(.public-DraftEditor-content) {
 
 }
+

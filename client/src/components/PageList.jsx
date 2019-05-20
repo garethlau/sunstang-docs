@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Axios from 'axios';
+import {Link} from 'react-router-dom';
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -79,13 +80,13 @@ class PageList extends Component {
                         {(provided, snapshot) => (
                             <div {...provided.droppableProps} ref={provided.innerRef}>
                                 {this.state.pages.map((page, index) => (
-                                <Draggable key={page._id} draggableId={page._id} index={index}>
-                                    {(provided, snapshot) => (
-                                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                            {page.title}
-                                        </div>
-                                    )}
-                                </Draggable>
+                                    <Draggable key={page._id} draggableId={page._id} index={index}>
+                                        {(provided, snapshot) => (
+                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                                <Link to={('/edit/page/' + page._id)}>{page.title}</Link>
+                                            </div>
+                                        )}
+                                    </Draggable>
                                 ))}
                                 {provided.placeholder}
                             </div>

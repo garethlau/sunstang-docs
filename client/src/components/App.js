@@ -9,7 +9,6 @@ import {connect} from 'react-redux';
 
 // doc viewer components
 import PageDriver from './PageDriver';
-import Page from './Page';
 
 // doc edditor components
 import EditPagesDriver from './EditPagesDriver';
@@ -40,7 +39,6 @@ class App extends Component {
                         <Route exact={true} path="/login" component={Login}/>
 
                         <Route exact={true}  path="/docs" component={PageDriver} />
-                        <Route path="/docs/page" component={Page}/>
 
                         <Route exact path="/edit" component={EditPagesDriver}/>
                         <Route path="/edit/page" component={PageEditor}/>

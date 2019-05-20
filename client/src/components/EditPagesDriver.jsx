@@ -35,7 +35,7 @@ class EditPagesDriver extends Component {
             // user is logged in
             return (
                 <>
-                    {this.renderContent()}
+                    {this.renderPageList()}
                 </>
             )
         }
@@ -54,35 +54,14 @@ class EditPagesDriver extends Component {
         }
     };
 
-    renderContent = () => {
-
-        const titlesArray = this.props.allPages.map(page => {
-            let pagePath = "/edit/page/" + page._id;
-            return(
-                <Link key={page._id} to={pagePath}>
-                    <div>
-                        {page.title}
-                    </div>
-                </Link>
-            )
-        });
-
-
-
-        return(
-            <>
-                <h1>Editor Mode</h1>
-                {titlesArray}
-                <Link to="/edit/page">Create new page</Link>
-            </>
-        )
-    };
-
     renderPageList = () => {
         // is the data loaded?
         if (this.state.isLoaded) {
             return (
-                <PageList pages={this.state.pages}/>
+                <>
+                    <PageList pages={this.state.pages}/>
+                    <Link to="/edit/page">Create new page</Link>
+                </>
             )
         }
         else {
@@ -98,7 +77,6 @@ class EditPagesDriver extends Component {
         return (
             <div>
                 {this.gateKeeper()}
-                {this.renderPageList()}
             </div>
         )
     }

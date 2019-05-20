@@ -16,3 +16,6 @@
 .ordered-list-item {
     
 }
+figure {
+    margin: 0 !important;
+}

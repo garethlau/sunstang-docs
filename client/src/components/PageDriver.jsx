@@ -18,6 +18,7 @@ class PageDriver extends Component {
     };
 
     componentDidMount() {
+        // const DEFAULT_PAGE_ID = '5ce28e5ba59c404a0cf2bd6c'
         const DEFAULT_PAGE_ID = '5ce16d91f4b00a4af0eb5e22';
         this.props.fetchPage(DEFAULT_PAGE_ID);
         // load the links to the buttons
@@ -39,7 +40,7 @@ class PageDriver extends Component {
                 return (
                     <div key={pageId}>
 	                    <button className={pageViewerStyles.titlesButton} onClick={() => {this.props.fetchPage(pageId)}}>
-                            <p>{page.title}</p>
+                            <p className={pageViewerStyles.pageTitles}>{page.title}</p>
 	                    </button>
                     </div>
                 )
@@ -64,9 +65,7 @@ class PageDriver extends Component {
         else {
             const {title, content, authorId} = this.props.page;
             return (
-                <div>
-                    <ReadOnlyEditor title={title} authorId={authorId} storedState={content}/>
-                </div>
+                <ReadOnlyEditor title={title} authorId={authorId} storedState={content}/>
             )
         }
     }
@@ -79,7 +78,6 @@ class PageDriver extends Component {
                     {this.renderEditor()}
                 </div>
                 <div className={pageViewerStyles.titlesContainer}>
-                    Pages
                     {this.renderPageTitles()}
                 </div>
             </div>
