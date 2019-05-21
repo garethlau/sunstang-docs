@@ -200,6 +200,16 @@ class PageEditor extends Component {
 		})
 	}
 
+	blockStyle = (contentBlock) => {
+		const type = contentBlock.getType();
+		if (type === 'blockquote') {
+			return 'blockQuoteStyle'
+		}
+		else if (type === 'code-block') {
+			return 'codeBlockStyle'
+		}
+	}
+
 	// enforce login
 	gateKeeper = () => {
         if (this.props.auth) {
@@ -237,6 +247,7 @@ class PageEditor extends Component {
 						onChange={this.onChange}
 						plugins={plugins}
 						ref={(element) => {this.editor = element}}
+						blockStlyeFn={this.blockStyle}
 					/>
 				</div>
 				<AlignmentTool/>

@@ -19,18 +19,32 @@ module.exports = app => {
 
     app.get('/api/page/', (req, res) => {
         const pageId = req.query.pageId;
-        Page.findById(pageId).then((page, err) => {
-            if (err) {
-                res.status(statusCodes.INTERNAL_SERVER_ERROR);
-            }
-            else {
-                console.log("api got page", page);
+        // find the page by id
+        if (req.query.pageId === "defaultPage") {
+            console.log("Getting default page", pageId);
+            Page.findOne({index: 1}).then(page => {
                 res.status(statusCodes.OK).send(page);
-            }
-        }).catch((err) => {
-            console.log(err);
-            res.status(statusCodes.NOT_FOUND);
-        })
+            }).catch(err => {
+                console.log(err);
+                res.status(statusCodes.INTERNAL_SERVER_ERROR).send(err);
+            });
+        }
+        // if no page id is provided, default to the first page
+        else {
+            console.log("Getting a page by id", pageId);
+            Page.findById(pageId).then((page, err) => {
+                if (err) {
+                    res.status(statusCodes.INTERNAL_SERVER_ERROR);
+                }
+                else {
+                    console.log("api got page", page);
+                    res.status(statusCodes.OK).send(page);
+                }
+            }).catch((err) => {
+                console.log(err);
+                res.status(statusCodes.NOT_FOUND);
+            });
+        }
     });
 
     app.post('/api/page/', (req, res) => {
@@ -39,10 +53,8 @@ module.exports = app => {
         console.log("Page id is:", pageId);
         console.log("page is", page);
 
-
-
         if (pageId === undefined) {
-            console.log("Page is new");
+            // this is a new page
             // get number of documents
             Page.countDocuments({}).then(count => {
                 let pageIndex = count + 1;
@@ -63,8 +75,6 @@ module.exports = app => {
             }).catch(err => {
                 console.log(err);
             })
-            // this is a new page
-            
         }
         else {
             // this page already exists
@@ -112,11 +122,11 @@ module.exports = app => {
     // for each item in the array, lets find the document and then change its index to match the arrays
     app.post('/api/pages', (req, res) => {
         const pagesArray = req.body.data;
-        let pageIndex = 1
+        let pageIndex = 0
         pagesArray.forEach(page => {
+            pageIndex = pageIndex + 1;
             Page.findOneAndUpdate({title: page.title}, {index: pageIndex}).then(updatedDoc => {
                 let copy = JSON.stringify(updatedDoc).slice(0, 100);
-                pageIndex = pageIndex + 1;
                 console.log("Updated page " + pageIndex + ": ", copy);
             }).catch(err => console.log(err));
         });

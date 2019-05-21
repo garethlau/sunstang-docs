@@ -18,9 +18,7 @@ class PageDriver extends Component {
     };
 
     componentDidMount() {
-        // const DEFAULT_PAGE_ID = '5ce28e5ba59c404a0cf2bd6c'
-        const DEFAULT_PAGE_ID = '5ce16d91f4b00a4af0eb5e22';
-        this.props.fetchPage(DEFAULT_PAGE_ID);
+        this.props.fetchPage("defaultPage");
         // load the links to the buttons
         axios.get('/api/pages').then((res) => {
             console.log(res);
@@ -29,6 +27,9 @@ class PageDriver extends Component {
                 pages: res.data
             });
         })
+
+
+
     }
 
     renderPageTitles = () => {
