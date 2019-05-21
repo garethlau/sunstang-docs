@@ -38,24 +38,38 @@ module.exports = app => {
         const page = req.body;
         console.log("Page id is:", pageId);
         console.log("page is", page);
+
+
+
         if (pageId === undefined) {
-            // this is a new page
-            new Page({
-                authorId: req.user._id,
-                title: page.title,
-                content: page.blocks,
-                inEdit: false
-            }).save().then((newPage) => {
-                console.log("Page saved...", page);
-                res.status(statusCodes.CREATED).send(newPage);
+            console.log("Page is new");
+            // get number of documents
+            Page.countDocuments({}).then(count => {
+                let pageIndex = count + 1;
+                console.log("pageindex is", pageIndex);
+                new Page({
+                    authorId: req.user._id,
+                    title: page.title,
+                    content: page.blocks,
+                    index: pageIndex,
+                    inEdit: false
+                }).save().then((newPage) => {
+                    console.log("Page saved...", page);
+                    res.status(statusCodes.CREATED).send(newPage);
+                }).catch(err => {
+                    console.log(err);
+                    res.status(statusCodes.INTERNAL_SERVER_ERROR);
+                });
             }).catch(err => {
                 console.log(err);
-                res.status(statusCodes.INTERNAL_SERVER_ERROR);
-            });
+            })
+            // this is a new page
+            
         }
         else {
             // this page already exists
             console.log("page already exists");
+
             Page.findById(pageId).then((newPage) => {
                 console.log("newPage", newPage);
                 newPage.title = page.title;
@@ -85,7 +99,7 @@ module.exports = app => {
 
     // get all pages
     app.get('/api/pages', (req, res) => {
-        Page.find({}).then((pages) => {
+        Page.find({}).sort({index: 1}).then((pages) => {
             res.status(statusCodes.OK).send(pages);
         }).catch(err => {
             console.log(err);
@@ -94,23 +108,18 @@ module.exports = app => {
     });
 
     // reorder pages
-    // this is done by deleting the current pages and then saving an array with the new order
+    // the array in the body of the request is in the right order
+    // for each item in the array, lets find the document and then change its index to match the arrays
     app.post('/api/pages', (req, res) => {
-        //console.log("IN axios.post req is", req.body.data.length);
-        Page.deleteMany({}).then(() => {
-            const pagesArray = req.body.data;
-
-            pagesArray.forEach((page) => {
-                new Page(page).save().then(savedPage => {
-                    // for debug
-                    let copy = JSON.stringify(savedPage).slice(0, 100);
-                    console.log(copy);
-                }).catch(err => {
-                    console.log(err);
-                    res.status(statusCodes.INTERNAL_SERVER_ERROR).send(err);
-                });
-            })
-            res.status(statusCodes.OK);
+        const pagesArray = req.body.data;
+        let pageIndex = 1
+        pagesArray.forEach(page => {
+            Page.findOneAndUpdate({title: page.title}, {index: pageIndex}).then(updatedDoc => {
+                let copy = JSON.stringify(updatedDoc).slice(0, 100);
+                pageIndex = pageIndex + 1;
+                console.log("Updated page " + pageIndex + ": ", copy);
+            }).catch(err => console.log(err));
         });
+
     });
 }
