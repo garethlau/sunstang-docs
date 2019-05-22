@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import Axios from 'axios';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import {Link} from 'react-router-dom';
+// import actions
+import Axios from 'axios';
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -27,10 +28,10 @@ class PageList extends Component {
             showSuccessPopup: false
         }
         this.onDragEnd = this.onDragEnd.bind(this);
+
     }
 
-    // todo change to arrow syntax
-    onDragEnd (result) {
+    onDragEnd(result) {
         // dropped outside the list
         if (!result.destination) {
             return;
@@ -75,18 +76,19 @@ class PageList extends Component {
     render() {     
         return (
             <>
+
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="droppable">
                         {(provided, snapshot) => (
                             <div {...provided.droppableProps} ref={provided.innerRef}>
                                 {this.state.pages.map((page, index) => (
-                                    <Draggable key={page._id} draggableId={page._id} index={index}>
-                                        {(provided, snapshot) => (
-                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                <Link to={('/edit/page/' + page._id)}>{page.title}</Link>
-                                            </div>
-                                        )}
-                                    </Draggable>
+                                <Draggable key={page._id} draggableId={page._id} index={index}>
+                                    {(provided, snapshot) => (
+                                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                            <Link to={"/edit/page/" + page._id}>{page.title}</Link>
+                                        </div>
+                                    )}
+                                </Draggable>
                                 ))}
                                 {provided.placeholder}
                             </div>
@@ -99,6 +101,4 @@ class PageList extends Component {
         );
     }
 }
-
-
 export default PageList;

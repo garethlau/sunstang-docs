@@ -39,7 +39,7 @@ class App extends Component {
                         <Route exact={true} path="/login" component={Login}/>
 
                         <Route exact={true}  path="/docs" component={PageDriver} />
-
+                        
                         <Route exact path="/edit" component={EditPagesDriver}/>
                         <Route path="/edit/page" component={PageEditor}/>
                     </>

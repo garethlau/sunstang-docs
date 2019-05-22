@@ -7,6 +7,7 @@ import {fetchPage} from '../actions';
 
 // import components
 import Loader from './Loader';
+import Header from './Header';
 
 // import styling
 import pageViewerStyles from '../styles/pageViewerStyles.module.css';
@@ -74,14 +75,18 @@ class PageDriver extends Component {
 	render() {
         console.log(this.props.page);
         return(
-            <div className={pageViewerStyles.viewerContainer}>
-                <div className={pageViewerStyles.pageContainer}>
-                    {this.renderEditor()}
-                </div>
-                <div className={pageViewerStyles.titlesContainer}>
-                    {this.renderPageTitles()}
+            <div>
+                <Header/>
+                <div className={pageViewerStyles.viewerContainer}>
+                    <div className={pageViewerStyles.pageContainer} >
+                        {this.renderEditor()}
+                    </div>
+                    <div className={pageViewerStyles.titlesContainer}>
+                        {this.renderPageTitles()}
+                    </div>
                 </div>
             </div>
+
         )
     }
 }

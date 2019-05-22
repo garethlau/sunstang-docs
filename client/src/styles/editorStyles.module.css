@@ -2,12 +2,13 @@
     width: 65%;
     background: #fefefe;
     padding: 10px 5% 20px 5%;
+    height: calc(100vh - 50px);
+    overflow: scroll;
 }
 .titleContainer {
   border-width: 0 0 2px 0;
   border-style: solid;
   border-color: #707070;
-  margin-bottom: 15px;
 }
 .title {
   font-size: 3em;
@@ -28,11 +29,6 @@
   cursor: text;
   border-radius: 2px;
   margin-bottom: 2em;
-}
-.scroll {
-  overflow-y: scroll;
-  height: 80vh;
-  max-height: 90vh;
 }
 blockquote {
   font-size: 4em;

@@ -10,6 +10,7 @@ import {fetchAllPages} from '../actions';
 import Login from './Login';
 import Loader from './Loader';
 import PageList from './PageList';
+import Header from './Header';
 
 class EditPagesDriver extends Component {
 

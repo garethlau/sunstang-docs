@@ -36,6 +36,7 @@ import 'draft-js-alignment-plugin/lib/plugin.css';
 // components
 import Login from './Login';
 import Loader from './Loader';
+import Header from './Header';
 
 // plugin config
 const toolbarPlugin = createToolbarPlugin({
@@ -251,26 +252,31 @@ class PageEditor extends Component {
 					/>
 				</div>
 				<AlignmentTool/>
-				<Toolbar>
-					{
-						// may be use React.Fragment instead of div to improve perfomance after React 16
-						(externalProps) => (
-							<div>
-								<BoldButton {...externalProps} />
-								<ItalicButton {...externalProps} />
-								<UnderlineButton {...externalProps} />
-								<HeadlineOneButton {...externalProps} />
-								<UnorderedListButton {...externalProps} />
-								<OrderedListButton {...externalProps} />
-								<BlockquoteButton {...externalProps} />
-								<CodeBlockButton {...externalProps} />
-							</div>
-						)
-					}
-				</Toolbar>
-				<input type="file" name="file" onChange={this.fileHandler}/>
-				<button onClick={this.savePage}>Save</button>
-				<button onClick={this.deletePage}>Delete this page</button>
+				<div style={{position: "absolute", top: "50px", right: "0"}}>
+					<Toolbar>
+						{
+							// may be use React.Fragment instead of div to improve perfomance after React 16
+							(externalProps) => (
+								<div>
+									<BoldButton {...externalProps} />
+									<ItalicButton {...externalProps} />
+									<UnderlineButton {...externalProps} />
+									<HeadlineOneButton {...externalProps} />
+									<UnorderedListButton {...externalProps} />
+									<OrderedListButton {...externalProps} />
+									<BlockquoteButton {...externalProps} />
+									<CodeBlockButton {...externalProps} />
+								</div>
+							)
+						}
+					</Toolbar>
+					<div>
+						<input type="file" name="file" onChange={this.fileHandler}/>
+					</div>
+					<button onClick={this.savePage}>Save</button>
+					<button onClick={this.deletePage}>Delete this page</button>
+				</div>
+				
 			</div>
 		);
 	};
@@ -278,6 +284,7 @@ class PageEditor extends Component {
 	render() {
 		return (
 			<div>
+				<Header/>
 				{this.gateKeeper()}
 			</div>
 		)
