@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import '../app.css';
 
@@ -21,7 +21,7 @@ import PrivateRoute from './PrivateRoute';  // not being used, ran into issue of
 
 const Header = () => <h2>Header</h2>;
 const Landing = () => <h2>Landing</h2>;
-
+const AuthPlaceholder = () => <></>;        // saves the state between pages
 
 class App extends Component {
     componentDidMount() {
@@ -33,8 +33,9 @@ class App extends Component {
             <div className="app">
                 <BrowserRouter>
                     <>
+                        <Route path="/" component={AuthPlaceholder}/>
                         <Route exact={true} path="/" component={Header}/>
-                        <Route exact={true} path="/" component={Landing}/>
+                        <Route exact path="/" component={Landing}/>
 
                         <Route exact={true} path="/login" component={Login}/>
 
@@ -42,6 +43,7 @@ class App extends Component {
                         
                         <Route exact path="/edit" component={EditPagesDriver}/>
                         <Route path="/edit/page" component={PageEditor}/>
+
                     </>
                 </BrowserRouter>
             </div>
