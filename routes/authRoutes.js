@@ -2,10 +2,6 @@ const passport = require('passport');
 
 module.exports = app => {
 
-    app.get("/", (req, res) => {
-		res.send("localhost5000home");
-	});
-
     // successful auth route for testing
     app.get('/success', (req, res) => {
         res.send("auth successful");
