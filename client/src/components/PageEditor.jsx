@@ -67,7 +67,7 @@ const plugins = [
 	imagePlugin
 ];
 // the default text that is shown
-const text = 'Once you click into the text field the sidebar plugin will show up …';
+const text = 'Edit me!';
 
 class PageEditor extends Component {
 	_isMounted = false;     // prevent the setting of state when the component is not mounted
@@ -252,7 +252,7 @@ class PageEditor extends Component {
 					/>
 				</div>
 				<AlignmentTool/>
-				<div style={{position: "absolute", top: "50px", right: "0"}}>
+				<div style={{position: "absolute", top: "100px", right: "20%", width: "38px"}}>
 					<Toolbar>
 						{
 							// may be use React.Fragment instead of div to improve perfomance after React 16

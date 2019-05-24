@@ -2,7 +2,6 @@
 // ran into issue of infinite action calls
 
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {Route, Redirect} from 'react-router-dom';
 
 import axios from 'axios';
@@ -10,43 +9,36 @@ import axios from 'axios';
 import Loader from './Loader'
 import {fetchUser} from '../actions';
 
-
-class PrivateRoute extends Component {
+class PrivateRoute extends Component { 
+	state = {
+		auth: null
+	}
 	componentDidMount() {
-		console.log(this.props.auth);
-	}
-	renderContent = () => {
-		console.log("auth is: ", this.props.auth);
-		if (this.props.auth) {
-			// logged in
-			return (
-				<this.props.component/>
-			)
-		}
-		else {
-			// not logged in
-			return (
-				<div>
-					<Redirect to={{pathname: '/login', state: {from: this.props.location}}} />
-				</div>
-			)
-		}
-	}
+		axios.get('/api/current-user').then(res => {
+			console.log(res.data);
+			if (res.data._id !== undefined) {
+				// logged in
+				this.setState({auth: true})
+			}
+			else {
+				this.setState({auth: false})
+			}
+			console.log("auth is", this.state.auth);
+		})
+	}	
 
 	render() {
-		console.log(this.props)
-		return(
-			<div>
-				{this.renderContent()}
-			</div>
-		)
+		if (this.state.auth != null) {
+			if (this.state.auth) {
+				return (<div>logged in</div>)
+			}
+			else {
+				return (<Redirect to="/login"/>);
+			}
+		}
+		else {
+			return (<div>loading</div>)
+		}
 	}
 }
-
-function mapStateToProps(state) {
-	return ({
-		auth: state.auth
-	})
-}
-
-export default connect(mapStateToProps)(PrivateRoute);
+export default PrivateRoute;
