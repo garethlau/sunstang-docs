@@ -77,3 +77,20 @@ module.exports = {
 };
 ```
 <b>Some routes check for auth status. If you do not want to create a Google OAuth API, I think you should be able to hard code somewhere so that you are always authed. I will look into this.</b>
+
+# What's left?
+- Editting conflicts
+- Edit history
+- Protected pages
+- Page deletion protection
+- Code styling based on language
+- Keyboard shortcuts for styles
+- File hosting
+- Mentions
+- Hashtags
+- Creating an effective search system
+- Links and embedded content
+- Lots and lots and lots of styling
+- Code clean up and comments!
+
+<b>There's still lots and lots to do!</b>
