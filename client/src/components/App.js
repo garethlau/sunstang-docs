@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Redirect, Link} from 'react-router-dom';
 
 import '../app.css';
 
 // redux
 import * as actions from '../actions';
 import {connect} from 'react-redux';
+
+import axios from 'axios';
 
 // doc viewer components
 import PageDriver from './PageDriver';
@@ -16,22 +18,32 @@ import PageEditor from './PageEditor';
 
 // routing components
 import Login from './Login';
-import PrivateRoute from './PrivateRoute';  // not being used, ran into issue of repeated action calls
+import PrivateRoute from './PrivateRoute'
 
 
 const Header = () => <h2>Header</h2>;
 const Landing = () => <h2>Landing</h2>;
 const AuthPlaceholder = () => <></>;        // saves the state between pages
+const Protected = () => <h1>Protected</h1>
+const Public = () => <h1>Public</h1>
+const Log = () => <h1>Log</h1>
+
 
 class App extends Component {
+    
     componentDidMount() {
         this.props.fetchUser();
     }
 
 	render() {
+        console.log(this.props.auth);
         return(
             <div className="app">
-                <BrowserRouter>
+
+                <Router>
+                <ul>
+                    <li><Link to="/protected">protected</Link></li>
+                </ul>
                     <>
                         <Route path="/" component={AuthPlaceholder}/>
                         <Route exact={true} path="/" component={Header}/>
@@ -44,8 +56,11 @@ class App extends Component {
                         <Route exact path="/edit" component={EditPagesDriver}/>
                         <Route path="/edit/page" component={PageEditor}/>
 
+                        <Route path="/public" component={Public}/>
+                        <Route path="/log" component={Log}/>
+                        <PrivateRoute path="/protected" component={Protected}/>
                     </>
-                </BrowserRouter>
+                </Router>
             </div>
         )
     }

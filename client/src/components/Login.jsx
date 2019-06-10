@@ -15,15 +15,11 @@ class Login extends Component {
 					borderRadius: "10px",
 					textAlign: "center"
 				}}>
-					<h2>Sorry! You need to be logged in.</h2>
+					<h2>You need to log in to see the content.</h2>
 					<div style={{
-						display: "grid",
-						gridTemplateColumns: "1fr 1fr",
-						gridColumnGap: "20px",
 						width: "100%"
 					}}>
-						<a href="/auth/google"><img style={{width: "100%", objectFit: "contain"}} src={require("../assets/google_signin_buttons/btn_google_signin_light_normal_web@2x.png")} alt="sign in with google"/></a>
-						<a href="/auth/slack"><img style={{width: "100%", objectFit: "contain"}} src="https://api.slack.com/img/sign_in_with_slack.png" alt="sign in with slack"/></a>
+						<a href="/auth/slack"><img style={{width: "172px", objectFit: "contain"}} src="https://api.slack.com/img/sign_in_with_slack.png" alt="sign in with slack"/></a>
 					</div>
 				</div>
 
