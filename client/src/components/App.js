@@ -36,7 +36,7 @@ class App extends Component {
     }
 
 	render() {
-        console.log(this.props.auth);
+        console.log(this.props.user);
         return(
             <div className="app">
 
@@ -68,7 +68,7 @@ class App extends Component {
 
 function mapStateToProps(state) {
     return ({
-        auth: state.auth
+        user: state.user
     })
 }
 
