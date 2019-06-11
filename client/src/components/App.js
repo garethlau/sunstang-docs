@@ -19,11 +19,9 @@ import PageEditor from './PageEditor';
 // routing components
 import Login from './Login';
 import PrivateRoute from './PrivateRoute'
+import NavBar from './NavBar';
 
-
-const Header = () => <h2>Header</h2>;
 const Landing = () => <h2>Landing</h2>;
-const AuthPlaceholder = () => <></>;        // saves the state between pages
 const Protected = () => <h1>Protected</h1>
 const Public = () => <h1>Public</h1>
 const Log = () => <h1>Log</h1>
@@ -41,20 +39,16 @@ class App extends Component {
             <div className="app">
 
                 <Router>
-                <ul>
-                    <li><Link to="/protected">protected</Link></li>
-                </ul>
+                    <NavBar/>
                     <>
-                        <Route path="/" component={AuthPlaceholder}/>
-                        <Route exact={true} path="/" component={Header}/>
                         <Route exact path="/" component={Landing}/>
 
                         <Route exact={true} path="/login" component={Login}/>
 
                         <Route exact={true}  path="/docs" component={PageDriver} />
                         
-                        <Route exact path="/edit" component={EditPagesDriver}/>
-                        <Route path="/edit/page" component={PageEditor}/>
+                        <PrivateRoute exact={true} path="/edit" component={EditPagesDriver}/>
+                        <PrivateRoute path="/edit/page" component={PageEditor}/>
 
                         <Route path="/public" component={Public}/>
                         <Route path="/log" component={Log}/>

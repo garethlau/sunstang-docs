@@ -10,7 +10,7 @@ class PrivateRoute extends Component {
 		console.log("this.props.auth in private route is", this.props.user);
 		const Component = this.props.component;
 		return (
-			<Route path={this.props.path} render={(props) => {
+			<Route exact={this.props.exact} path={this.props.path} render={(props) => {
 				if (this.props.user) {	// user is logged in
 					if (this.props.user.admin) {	// user is admin
 						return (<Component {...props}/>)

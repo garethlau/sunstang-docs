@@ -50,7 +50,7 @@ class PageDriver extends Component {
         }
         else {
             return (
-                <Loader/>
+                <Loader size={40}/>
             )
         }
     };
@@ -59,7 +59,7 @@ class PageDriver extends Component {
         console.log("props content", this.props.page.content);
         if (this.props.page.content === undefined) {
             return (
-                <div>
+                <div style={{width: "65%"}}>
                     <Loader/>
                 </div>
             )
@@ -76,7 +76,6 @@ class PageDriver extends Component {
         console.log(this.props.page);
         return(
             <div>
-                <Header/>
                 <div className={pageViewerStyles.viewerContainer}>
                     <div className={pageViewerStyles.pageContainer} >
                         {this.renderEditor()}

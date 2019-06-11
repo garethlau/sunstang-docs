@@ -29,31 +29,7 @@ class EditPagesDriver extends Component {
         })
     }
 
-    // enforce login
-    // todo see if we can make this a reusable thing
-    gateKeeper = () => {
-        if (this.props.auth) {
-            // user is logged in
-            return (
-                <>
-                    {this.renderPageList()}
-                </>
-            )
-        }
-        else if (this.props.auth === null) {
-            // not loaded
-            return (
-                <>
-                    <Loader/>
-                </>
-            )
-        }
-        else {
-            return (
-                <Login/>
-            )
-        }
-    };
+
 
     renderPageList = () => {
         // is the data loaded?
@@ -77,7 +53,7 @@ class EditPagesDriver extends Component {
     render() {
         return (
             <div>
-                {this.gateKeeper()}
+                {this.renderPageList()}
             </div>
         )
     }

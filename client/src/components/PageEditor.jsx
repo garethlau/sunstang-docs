@@ -211,31 +211,6 @@ class PageEditor extends Component {
 		}
 	}
 
-	// enforce login
-	gateKeeper = () => {
-        if (this.props.auth) {
-            // user is logged in
-            return (
-                <>
-                    {this.renderContent()}
-                </>
-            )
-        }
-        else if (this.props.auth === null) {
-            // not loaded
-            return (
-                <>
-                    <Loader/>
-                </>
-            )
-        }
-        else {
-            return (
-                <Login/>
-            )
-        }
-    };
-
 	renderContent = () => {
 		return(
 			<div className={editorStyles.editorContainer}>
@@ -284,8 +259,7 @@ class PageEditor extends Component {
 	render() {
 		return (
 			<div>
-				<Header/>
-				{this.gateKeeper()}
+				{this.renderContent()}
 			</div>
 		)
 	}
