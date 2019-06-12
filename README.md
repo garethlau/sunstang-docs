@@ -44,44 +44,52 @@ EditPagesDriver.jsx contains all the logic for editting <b>and creating</b> page
 
 PageEditor is responsible for all the logic concerning the page content and persisting changse to the database.
 
-<b>PrivateRoutes.jsx is broken.</b>
+## Styling
+Styling is currently split between inline styling and CSS modules. Looking into packages like [Radium](https://formidable.com/open-source/radium/ "Official Site") ([Github Link](https://github.com/FormidableLabs/radium "Radium on Github")) to have consistent, inline styling. 
 
 ## State Management
 This project uses [redux](https://redux.js.org/ "https://redux.js.org/") and [redux-thunk](https://github.com/reduxjs/redux-thunk "Redux-Thunk on Github") for state management. 
+
+## Future Development
+Moving foward, components will be developed as functional components (instead of class based components) using [hooks](https://reactjs.org/docs/hooks-intro.html). 
+
+<b> Might have to rethink Redux as more components switch over to being functional components.</b>
+
+For now, there will just be a happy mix of functional and class based components.
 
 # Backend Development
 ## Authentication
 Google and Slack oauth using [Passport.js](http://www.passportjs.org/ "http://www.passportjs.org/"). All authentication logic can be found in `/routes/authRoutes.js`. For Google or Slack oauth to work, you will need to obtain a clientID and clientSecret. <b>I will add more links later.</b>
 
 ## APIs
-All found in `/routes/apiRoutes.js`. 
+All found in `/routes/apiRoutes.js`.
 
+## Auth
+This app uses [Passport's Slack OAuth Strategy](http://www.passportjs.org/packages/passport-slack-oauth2/). You will have to generate your own Slack app credentials and enter them into `/config/dev.js`:
+
+``` javascript
+module.exports = {
+    // app no longer supports google auth
+    googleClientID: '', 
+    googleClientSecret: '', 
+    slackClientID: 'YOURSLACKCLIENTID',
+    slackClientSecret: 'YOURSLACKCLIENTSECRET',
+    mongoURI: 'YOURMONGOURI',
+    mongoUser: 'YOURMONGOUSERNAME',
+    mongoPassword: 'YOURMONGOPASSWORD',
+    cookieKey: 'RANDOMKEY'
+};
+```
 ## Database
 Mongo is being used as the database. For development, you can:
 1) Host a local mongo database, connect it by creating a dev.js file in the config folder and exporting the config variables. 
 2) Use [mlab](https://mlab.com/) and connect using the given config variables. (I would recomment this option.)
 
-In either case, the variables have to be as follows:
-
-In `/config/dev.js`:
-``` javascript
-module.exports = {
-    googleClientID: '',
-    googleClientSecret: '', 
-    slackClientID: '',
-    slackClientSecret: '',
-    mongoURI: 'ENTERMONGOURI',
-    mongoUser: 'ENTERMONGOUSERNAME',
-    mongoPassword: 'ENTERMONGOPASSWORD',
-    cookieKey: ''
-};
-```
-<b>Some routes check for auth status. If you do not want to create a Google OAuth API, I think you should be able to hard code somewhere so that you are always authed. I will look into this.</b>
+In either case, like with Slack credentials, your MLab credentials have to be pasted into `/config/dev.js`. 
 
 # What's left?
 - Editting conflicts
 - Edit history
-- Protected pages
 - Page deletion protection
 - Code styling based on language
 - Keyboard shortcuts for styles
