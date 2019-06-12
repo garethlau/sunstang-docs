@@ -1,0 +1,29 @@
+.container {
+    width: 60%;
+    background-color: grey;
+    
+    margin: auto 0 auto auto;
+    background: #fefefe;
+    height: calc(100vh - 50px);
+    overflow: scroll;
+    padding-right: calc((100vw - 60%) / 2);
+    overflow-x: hidden;
+}
+.linkContainer {
+    padding: 10px;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px 2px 1px 2px;
+    background: white;
+}
+.link:hover {
+    text-decoration: none;
+
+}
+.link {
+    color: black;
+    text-decoration: none;
+}
+.scroller {
+    height: 100%;
+}

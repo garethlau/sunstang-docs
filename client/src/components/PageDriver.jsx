@@ -1,17 +1,19 @@
-import React, {Component} from 'react';
+import React, {Component, Suspense} from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
 
 // import actions
 import {fetchPage} from '../actions';
 
-// import components
-import Loader from './Loader';
-import Header from './Header';
 
 // import styling
 import pageViewerStyles from '../styles/pageViewerStyles.module.css';
 import ReadOnlyEditor from './ReadOnlyEditor';
+
+// import components
+import Loader from './Loader';
+import Header from './Header';  // not being used
+const PageNav = React.lazy(() => import('./PageNav'));  // lazy import
 
 class PageDriver extends Component {
     state = {
@@ -30,20 +32,15 @@ class PageDriver extends Component {
         })
     }
 
-    renderPageTitles = () => {
+    renderPageNav = () => {
         if (this.state.isLoaded) {
             // got the page titles
-            return this.state.pages.map((page) => {
-            	// let path = '/docs/page/' + page._id;
-            	const pageId = page._id;
-                return (
-                    <div key={pageId}>
-	                    <button className={pageViewerStyles.titlesButton} onClick={() => {this.props.fetchPage(pageId)}}>
-                            <p className={pageViewerStyles.pageTitles}>{page.title}</p>
-	                    </button>
-                    </div>
-                )
-            })
+            return (
+                <div class={pageViewerStyles.navContainer}>
+                    <h1>Pages</h1>
+                    <PageNav pages={this.state.pages}/>
+                </div>
+            )
         }
         else {
             return (
@@ -78,7 +75,9 @@ class PageDriver extends Component {
                         {this.renderEditor()}
                     </div>
                     <div className={pageViewerStyles.titlesContainer}>
-                        {this.renderPageTitles()}
+                        <Suspense fallback={<Loader/>}>
+                            {this.renderPageNav()}
+                        </Suspense>
                     </div>
                 </div>
             </div>

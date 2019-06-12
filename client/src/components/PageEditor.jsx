@@ -74,8 +74,9 @@ class PageEditor extends Component {
 	state = {
 		//editorState: createEditorStateWithText(text)
 		editorState: createEditorStateWithText(text),
-		pageTitle: " ",
-		pageId: null
+		pageTitle: "",
+		pageId: null,
+		isLoaded: false,
 	};
 	componentDidMount() {
 		this._isMounted = true;
@@ -92,8 +93,9 @@ class PageEditor extends Component {
 				        pageTitle: res.data.title,
 				        authorId: res.data.authorId,
 				        editorState: EditorState.push(this.state.editorState, convertFromRaw(JSON.parse(res.data.content)), 'change-block-data'),
-				        pageId: res.data._id
-			        })
+						pageId: res.data._id,
+						isLoaded: true,
+			        });
 				}
 				// DELETE THIS
 				console.log("state.editorstate", this.state.editorState);
@@ -109,6 +111,7 @@ class PageEditor extends Component {
 				if (this._isMounted) {
 					this.setState({
 						authorId: authorId,
+						isLoaded: true,
 					})
 				}
 
@@ -257,11 +260,21 @@ class PageEditor extends Component {
 	};
 
 	render() {
-		return (
-			<div>
-				{this.renderContent()}
-			</div>
-		)
+		if (this.state.isLoaded) {
+			return (
+				<div>
+					{this.renderContent()}
+				</div>
+			)
+		}
+		else {
+			return (
+				<div>
+					<Loader/>
+				</div>
+			)
+		}
+
 	}
 }
 function mapStateToProps(state) {

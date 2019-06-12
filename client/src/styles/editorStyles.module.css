@@ -3,14 +3,13 @@
     background: #fefefe;
     padding: 10px 5% 20px 5%;
     height: calc(100vh - 50px);
-    overflow: scroll;
 }
 .titleContainer {
   border-width: 0 0 2px 0;
   border-style: solid;
   border-color: #707070;
 }
-.title {
+.title { 
   font-size: 3em;
   font: arial;
   margin-bottom: 0;

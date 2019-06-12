@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import {Link} from 'react-router-dom';
+import {withRouter, Link} from 'react-router-dom';
+import {Redirect} from 'react-router';
 // import actions
-import Axios from 'axios';
+import axios from 'axios';
+
+import pageListStyles from '../styles/pageListStyles.module.css';
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -12,7 +15,6 @@ const reorder = (list, startIndex, endIndex) => {
   
     return result;
 };
-
 
 class PageList extends Component {
     componentDidMount () {
@@ -28,7 +30,6 @@ class PageList extends Component {
             showSuccessPopup: false
         }
         this.onDragEnd = this.onDragEnd.bind(this);
-
     }
 
     onDragEnd(result) {
@@ -48,7 +49,7 @@ class PageList extends Component {
 
     saveList = () => {
         console.log(this.state.pages);
-        Axios.post('/api/pages', {data: this.state.pages}).then((res) => {
+        axios.post('/api/pages', {data: this.state.pages}).then((res) => {
             console.log(res);
             // todo show some sort of confirmation that it was successfully saved
             this.setState({
@@ -75,30 +76,34 @@ class PageList extends Component {
 
     render() {     
         return (
-            <>
+            <div class={pageListStyles.container}>
+                <div class={pageListStyles.scroller}>
+                    <h1>Pages (click the title to edit the page or drag to reoder the pages)</h1>
+                    <DragDropContext onDragEnd={this.onDragEnd}>
+                        <Droppable droppableId="droppable">
+                            {(provided, snapshot) => (
+                                <div {...provided.droppableProps} ref={provided.innerRef}>
+                                    {this.state.pages.map((page, index) => (
+                                    <Draggable key={page._id} draggableId={page._id} index={index}>
+                                        {(provided, snapshot) => (
+                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} class={pageListStyles.linkContainer}>
+                                                <Link to={"/edit/page/" + page._id} class={pageListStyles.link}>{page.title}</Link>
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                    <button onClick={() => this.saveList()}>SAVE</button>
+                    <button onClick={() => this.props.history.push("/edit/page")}>NEW</button>
+                    {this.renderSuccessPopup()}
+                </div>
+            </div>
 
-                <DragDropContext onDragEnd={this.onDragEnd}>
-                    <Droppable droppableId="droppable">
-                        {(provided, snapshot) => (
-                            <div {...provided.droppableProps} ref={provided.innerRef}>
-                                {this.state.pages.map((page, index) => (
-                                <Draggable key={page._id} draggableId={page._id} index={index}>
-                                    {(provided, snapshot) => (
-                                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                            <Link to={"/edit/page/" + page._id}>{page.title}</Link>
-                                        </div>
-                                    )}
-                                </Draggable>
-                                ))}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-                <button onClick={() => this.saveList()}>SAVE</button>
-                {this.renderSuccessPopup()}
-            </>
         );
     }
 }
-export default PageList;
+export default withRouter(PageList);

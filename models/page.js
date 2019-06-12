@@ -6,6 +6,7 @@ const pageSchema = new Schema({
     title: String,
     content: Object,
     index: Number,
+    category: String,
     inEdit: Boolean
 });
 

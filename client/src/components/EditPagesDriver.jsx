@@ -35,14 +35,13 @@ class EditPagesDriver extends Component {
             return (
                 <>
                     <PageList pages={this.state.pages}/>
-                    <Link to="/edit/page">Create new page</Link>
                 </>
             )
         }
         else {
             return (
                 <div>
-                    <Loader/>
+                    <Loader paddingTop={150}/>
                 </div>
             )
         }     
