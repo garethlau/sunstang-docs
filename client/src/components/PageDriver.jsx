@@ -28,9 +28,6 @@ class PageDriver extends Component {
                 pages: res.data
             });
         })
-
-
-
     }
 
     renderPageTitles = () => {

@@ -29,8 +29,6 @@ class EditPagesDriver extends Component {
         })
     }
 
-
-
     renderPageList = () => {
         // is the data loaded?
         if (this.state.isLoaded) {

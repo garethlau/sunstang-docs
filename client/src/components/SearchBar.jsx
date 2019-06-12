@@ -20,7 +20,8 @@ const SearchBar = () => {
         setQuery({
             query: e.target.value
         });
-
+        // TODO
+        // make api to search documents (yikes)
         // call search api and a lot of other stuff
     }
 
