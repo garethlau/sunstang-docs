@@ -109,7 +109,7 @@ module.exports = app => {
 
     // get all pages
     app.get('/api/pages', (req, res) => {
-        Page.find({}).sort({index: 1}).then((pages) => {
+        Page.find({}).sort({category: "asc", index: 1}).then((pages) => {
             res.status(statusCodes.OK).send(pages);
         }).catch(err => {
             console.log(err);
@@ -128,7 +128,11 @@ module.exports = app => {
             Page.findOneAndUpdate({title: page.title}, {index: pageIndex}).then(updatedDoc => {
                 let copy = JSON.stringify(updatedDoc).slice(0, 100);
                 console.log("Updated page " + pageIndex + ": ", copy);
+
             }).catch(err => console.log(err));
+            if (pageIndex == pagesArray.length) {
+                res.send("All pages saved");
+            }
         });
 
     });
