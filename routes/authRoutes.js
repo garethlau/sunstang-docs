@@ -22,13 +22,11 @@ module.exports = app => {
       })
     );
 
-    app.get("/auth/slack", passport.authenticate('Slack', {
-        scope: ["identity.basic"]
-    }));
+    app.get("/auth/slack", passport.authorize('Slack'));
 
     app.get('/auth/slack/callback',
-      passport.authenticate('Slack', { failureRedirect: '/login' }),
-      (req, res) => res.redirect('/success') // Successful authentication, redirect home.
+      passport.authenticate('Slack', { failureRedirect: '/login', successRedirect: '/' }),
+      (req, res) => res.redirect('/') // Successful authentication, redirect home.
     );
 
 }

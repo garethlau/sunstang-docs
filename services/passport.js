@@ -53,6 +53,7 @@ passport.use(new SlackStrategy({
     clientID: keys.slackClientID,
     clientSecret: keys.slackClientSecret,
     skipUserProfile: false,
+    scope: ["identity.basic"],
   },
   async (accessToken, refreshToken, profile, done) => {
     //passport callback function
