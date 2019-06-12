@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('users');
 const keys = require('../config/keys');
 
+const adminEmails = require('./adminEmails');
 
 // turns a user into an id
 passport.serializeUser((user, done) => {
@@ -13,13 +14,23 @@ passport.serializeUser((user, done) => {
 });
 
 //turns an id to a user
+/*
+passport.deserializeUser((user, done) => {
+    done(null, user);
+});  
+*/
+
+// TODO
+// look into why this didn't work
+// then it did work ???
 passport.deserializeUser((id, done) => {
     User.findById(id).then(user => {
         done(null, user);
     });
 });
 
-// google strategy
+
+// google strategy, not being used
 passport.use(
   new GoogleStrategy(
     {
@@ -49,28 +60,40 @@ passport.use(
 ));
 
 // slack strategy
-passport.use(new SlackStrategy({
-    clientID: keys.slackClientID,
-    clientSecret: keys.slackClientSecret,
-    skipUserProfile: false,
-    scope: ["identity.basic"],
-  },
-  async (accessToken, refreshToken, profile, done) => {
-    //passport callback function
-      const existingUser = await User.findOne({ slackId : profile.id})
-      if (existingUser) {
-          //user already exists
-          done(null, existingUser);
-      }
-      else {
-          // create a new profile
-          const user = new User({
-              slackId : profile.id,
-              name: profile.user.name,
-              admin: false
-          }).save()
-          done(null, user);
-      }
+
+/*
+NOTE FOR SLACK AUTH
+Have to go to 'https://api.slack.com/apps' to change the redirect url between prod and dev
+IF PROD, use: https://sunstang-website.herokuapp.com/auth/slack/callback
+if DEV, use: http://localhost:3000/auth/slack/callback
+*/
+
+passport.use(
+    new SlackStrategy({
+        clientID: keys.slackClientID,
+        clientSecret: keys.slackClientSecret,
+        skipUserProfile: false,
+        scope: ["identity.basic", "identity.email"],
+    }, async (accessToken, refreshToken, profile, done) => {
+        //passport callback function
+        const existingUser = await User.findOne({ slackId : profile.id});
+        if (existingUser) { //user already exists
+            done(null, existingUser);
+        }
+        else {  // create a new profile
+            let isAdmin = false;
+            console.log("Admin emails are", adminEmails);
+            // check if this is an admin email address
+            if (adminEmails.includes(profile.user.email)) { 
+                isAdmin = true;
+            }
+            const user = new User({
+                slackId : profile.id,
+                name: profile.user.name,
+                admin: isAdmin
+            }).save();
+            done(null, user);
+        }
         console.log('accessToken', accessToken);
         console.log('refreshToken', refreshToken);
         console.log('profile', profile);

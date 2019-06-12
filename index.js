@@ -68,8 +68,7 @@ if (environment === "dev"){
     console.log("\x1b[31m", "ENVIRONMENT IS DEV - ENSURE THAT THIS IS NOT SHOWING WHEN DEPLOYED", "\x1b[0m");
 } else if (environment === "production") {
     console.log("\x1b[34m", "RUNNING IN PRODUCTION", "\x1b[0m");
-    // make sure express serves production assets
-    app.use(express.static('client/build'));
+    app.use(express.static('client/build'));    // make sure express serves production assets
     // make sure express serves index.html if it doesn't know the route
     const path = require('path');
     app.get('*', (req, res) => {
@@ -77,5 +76,4 @@ if (environment === "dev"){
     });
 }
 
-// tell express to listen to the port
-app.listen(PORT);
+app.listen(PORT);   // tell express to listen to the port
