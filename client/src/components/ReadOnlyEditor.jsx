@@ -50,8 +50,8 @@ class ReadOnlyEditor extends Component {
     }
 
     render () {
-        console.log("props.storedState", this.props.storedState)
-        console.log("state editorstate", this.state.editorState);
+        // console.log("props.storedState", this.props.storedState)
+        // console.log("state editorstate", this.state.editorState);
         
         return (
             <div className={editorStyles.editorContainer} style={{overflow: "scroll"}}>

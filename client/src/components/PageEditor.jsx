@@ -37,6 +37,8 @@ import 'draft-js-alignment-plugin/lib/plugin.css';
 import Login from './Login';
 import Loader from './Loader';
 import Header from './Header';
+import PopupBanner from './PopupBanner';
+
 
 // plugin config
 const toolbarPlugin = createToolbarPlugin({
@@ -72,11 +74,11 @@ const text = 'Edit me!';
 class PageEditor extends Component {
 	_isMounted = false;     // prevent the setting of state when the component is not mounted
 	state = {
-		//editorState: createEditorStateWithText(text)
 		editorState: createEditorStateWithText(text),
 		pageTitle: "",
 		pageId: null,
 		isLoaded: false,
+		isDisconnected: false
 	};
 	componentDidMount() {
 		this._isMounted = true;
@@ -97,10 +99,8 @@ class PageEditor extends Component {
 						isLoaded: true,
 			        });
 				}
-				// DELETE THIS
-				console.log("state.editorstate", this.state.editorState);
+				// console.log("state.editorstate", this.state.editorState);
 			})
-
 		}
 		else {
 			// new page
@@ -114,16 +114,45 @@ class PageEditor extends Component {
 						isLoaded: true,
 					})
 				}
-
 			})
 		}
-
+		this.handleConnectionChange();	// check the connection once on load
+		// subscribe to connection change events
+		window.addEventListener('online', this.handleConnectionChange);
+		window.addEventListener('offline', this.handleConnectionChange);
 	}
+
+    handleConnectionChange = () => {
+        const condition = navigator.onLine ? 'online' : 'offline';
+        if (condition === "online") {
+            this.setState({
+                isDisconnected: false,
+                showConnectionPopup: true
+            });
+            setTimeout(() => {
+                this.setState({
+                    showConnectionPopup: false
+                })
+            }, 3000)
+        }   
+        if (condition === "offline") {
+            this.setState({
+                isDisconnected: true,
+                showConnectionPopup: true,
+            })
+            setTimeout(() => {
+                this.setState({
+                    showConnectionPopup: false
+                }, 3000);
+            })
+        } 
+	}
+	
 	componentWillUnmount() {
 		this._isMounted = false;
 	}
-
-	onChange = (editorState) => {
+	
+	onChange = (editorState) => {	// handle editor state changes
 		if (this._isMounted) {
 			this.setState({editorState})
 		}
@@ -214,58 +243,64 @@ class PageEditor extends Component {
 		}
 	}
 
+	renderPopup = () => {
+        if (this.state.showConnectionPopup) {
+            if (!this.state.isDisconnected) {
+                return (
+                    <PopupBanner message={"You're connection looks good."} status={"success"}/>
+                )
+            }
+            else {
+                return (
+                    <PopupBanner message={"Looks like there's a problem with your connection."} status={"fail"}/>
+                )
+            }
+        }
+    }
 	renderContent = () => {
-		return(
-			<div className={editorStyles.editorContainer}>
-				<div className={editorStyles.titleContainer}>
-					<input type={"text"} placeholder={"Page Title"} value={this.state.pageTitle} onChange={this.onTitleChange} className={`${editorStyles.title} ${editorStyles.editTitle}`}/>
-				</div>
-				<div onClick={this.focus} className={`${editorStyles.editor} ${editorStyles.scroll}`}>
-					<Editor
-						editorState={this.state.editorState}
-						onChange={this.onChange}
-						plugins={plugins}
-						ref={(element) => {this.editor = element}}
-						blockStlyeFn={this.blockStyle}
-					/>
-				</div>
-				<AlignmentTool/>
-				<div style={{position: "absolute", top: "100px", right: "20%", width: "38px"}}>
-					<Toolbar>
-						{
-							// may be use React.Fragment instead of div to improve perfomance after React 16
-							(externalProps) => (
-								<div>
-									<BoldButton {...externalProps} />
-									<ItalicButton {...externalProps} />
-									<UnderlineButton {...externalProps} />
-									<HeadlineOneButton {...externalProps} />
-									<UnorderedListButton {...externalProps} />
-									<OrderedListButton {...externalProps} />
-									<BlockquoteButton {...externalProps} />
-									<CodeBlockButton {...externalProps} />
-								</div>
-							)
-						}
-					</Toolbar>
-					<div>
-						<input type="file" name="file" onChange={this.fileHandler}/>
-					</div>
-					<button onClick={this.savePage}>Save</button>
-					<button onClick={this.deletePage}>Delete this page</button>
-				</div>
-				
-			</div>
-		);
-	};
-
-	render() {
 		if (this.state.isLoaded) {
-			return (
-				<div>
-					{this.renderContent()}
+			return(
+				<div className={editorStyles.editorContainer} style={{overflow: "scroll"}}>
+					<div className={editorStyles.titleContainer}>
+						<input type={"text"} placeholder={"Page Title"} value={this.state.pageTitle} onChange={this.onTitleChange} className={`${editorStyles.title} ${editorStyles.editTitle}`}/>
+					</div>
+					<div onClick={this.focus} className={`${editorStyles.editor} ${editorStyles.scroll}`}>
+						<Editor
+							editorState={this.state.editorState}
+							onChange={this.onChange}
+							plugins={plugins}
+							ref={(element) => {this.editor = element}}
+							blockStlyeFn={this.blockStyle}
+						/>
+					</div>
+					<AlignmentTool/>
+					<div style={{position: "absolute", top: "100px", right: "20%", width: "38px"}}>
+						<Toolbar>
+							{
+								// may be use React.Fragment instead of div to improve perfomance after React 16
+								(externalProps) => (
+									<div>
+										<BoldButton {...externalProps} />
+										<ItalicButton {...externalProps} />
+										<UnderlineButton {...externalProps} />
+										<HeadlineOneButton {...externalProps} />
+										<UnorderedListButton {...externalProps} />
+										<OrderedListButton {...externalProps} />
+										<BlockquoteButton {...externalProps} />
+										<CodeBlockButton {...externalProps} />
+									</div>
+								)
+							}
+						</Toolbar>
+						<div>
+							<input type="file" name="file" onChange={this.fileHandler}/>
+						</div>
+						<button onClick={this.savePage}>Save</button>
+						<button onClick={this.deletePage}>Delete this page</button>
+					</div>
+					
 				</div>
-			)
+			);
 		}
 		else {
 			return (
@@ -274,7 +309,15 @@ class PageEditor extends Component {
 				</div>
 			)
 		}
+	};
 
+	render() {
+		return (
+			<div>
+				{this.renderPopup()}
+				{this.renderContent()}
+			</div>
+		)
 	}
 }
 function mapStateToProps(state) {

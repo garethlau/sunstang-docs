@@ -15,7 +15,7 @@ import Header from './Header';
 class EditPagesDriver extends Component {
 
     state = {
-        isLoaded: false
+        isLoaded: false,
     }
 
     componentDidMount() {
@@ -26,7 +26,8 @@ class EditPagesDriver extends Component {
                 pages: pages,
                 isLoaded: true,
             });
-        })
+        });
+        
     }
 
     renderPageList = () => {
