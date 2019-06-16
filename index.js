@@ -60,7 +60,6 @@ const path = require('path');
 const conn = mongoose.connection;
 let gfs;
 conn.once('open', () => {
-    console.log("big suck")
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('uploads');
 })
