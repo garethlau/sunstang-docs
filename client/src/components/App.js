@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, lazy, Suspense} from 'react';
 import {BrowserRouter as Router, Route, Redirect, Link} from 'react-router-dom';
 
 import '../app.css';
@@ -9,6 +9,12 @@ import {connect} from 'react-redux';
 
 import axios from 'axios';
 
+// routing components
+import Login from './Login';
+import PrivateRoute from './PrivateRoute'
+import NavBar from './NavBar';
+import Loader from './Loader';
+
 // doc viewer components
 import PageDriver from './PageDriver';
 
@@ -16,10 +22,7 @@ import PageDriver from './PageDriver';
 import EditPagesDriver from './EditPagesDriver';
 import PageEditor from './PageEditor';
 
-// routing components
-import Login from './Login';
-import PrivateRoute from './PrivateRoute'
-import NavBar from './NavBar';
+import Test from './Test';
 
 const Landing = () => <h2>Landing</h2>;
 const Protected = () => <h1>Protected</h1>
@@ -42,17 +45,20 @@ class App extends Component {
                     <NavBar/>
                     <>
                         <Route exact path="/" component={Landing}/>
-
                         <Route exact={true} path="/login" component={Login}/>
-
-                        <Route exact={true}  path="/docs" component={PageDriver} />
-                        
-                        <PrivateRoute exact={true} path="/edit" component={EditPagesDriver}/>
-                        <PrivateRoute path="/edit/page" component={PageEditor}/>
 
                         <Route path="/public" component={Public}/>
                         <Route path="/log" component={Log}/>
                         <PrivateRoute path="/protected" component={Protected}/>
+
+                        <Route exact={true}  path="/docs" component={PageDriver} />
+                        <PrivateRoute exact={true} path="/edit" component={EditPagesDriver}/>
+                        <PrivateRoute path="/edit/page" component={PageEditor}/>
+
+                        <Route exact={true} path="/test" component={Test}/>
+                        <Suspense fallback={<Loader/>}>
+                            
+                        </Suspense>
                     </>
                 </Router>
             </div>

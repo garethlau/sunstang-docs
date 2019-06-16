@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import axios from 'axios';
 
 // import draft plugins
-import { AtomicBlockUtils, convertFromRaw, convertToRaw, EditorState } from "draft-js";
+import { AtomicBlockUtils, convertFromRaw, convertToRaw, EditorState, RichUtils } from "draft-js";
 import Editor, { createEditorStateWithText, composeDecorators } from 'draft-js-plugins-editor';
 import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
 //import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
@@ -151,7 +151,16 @@ class PageEditor extends Component {
 	componentWillUnmount() {
 		this._isMounted = false;
 	}
-	
+	handleKeyCommand = (command) => {
+		const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
+		if (newState) {
+			this.onChange(newState);
+			return "handled";
+		}
+		else {
+			return "not-handled"
+		}
+	}
 	onChange = (editorState) => {	// handle editor state changes
 		if (this._isMounted) {
 			this.setState({editorState})
@@ -271,6 +280,7 @@ class PageEditor extends Component {
 							plugins={plugins}
 							ref={(element) => {this.editor = element}}
 							blockStlyeFn={this.blockStyle}
+							handleKeyCommand={this.handleKeyCommand}
 						/>
 					</div>
 					<AlignmentTool/>
@@ -293,7 +303,7 @@ class PageEditor extends Component {
 							}
 						</Toolbar>
 						<div>
-							<input type="file" name="file" onChange={this.fileHandler}/>
+							<input type="file" name="file" accept="image/*" onChange={this.fileHandler}/>
 						</div>
 						<button onClick={this.savePage}>Save</button>
 						<button onClick={this.deletePage}>Delete this page</button>
