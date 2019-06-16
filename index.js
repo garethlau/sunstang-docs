@@ -54,6 +54,7 @@ mongoose.connect(keys.mongoURI, {
 const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
+eval(`Grid.prototype.findOne = ${Grid.prototype.findOne.toString().replace('nextObject', 'next')}`);
 const crypto = require('crypto');
 const path = require('path');
 
