@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/current-user', (req, res) => {
-    console.log("=== CURRENT USER === > " +  req.user.name + " : " + req.user._id + " : isAdmin? = " + req.user.admin);
+    req.user ? console.log("=== CURRENT USER === > " +  req.user.name + " : " + req.user._id + " : isAdmin? = " + req.user.admin) : console.log("=== NO USER LOGGED IN ===");
     res.send(req.user);
 });
 

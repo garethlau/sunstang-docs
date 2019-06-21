@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('users');
 const keys = require('../config/keys');
 
-const adminEmails = require('./adminEmails');
+const authConfig = require('./authConfig');
 
 // turns a user into an id
 passport.serializeUser((user, done) => {
@@ -75,16 +75,24 @@ passport.use(
         skipUserProfile: false,
         scope: ["identity.basic", "identity.email"],
     }, async (accessToken, refreshToken, profile, done) => {
+        console.log("=== ACCESS TOKEN === > " + accessToken);
+        console.log("=== REFRESH TOKEN === > " + refreshToken);
+        console.log("=== PROFILE ===");
+        console.log(profile);
         //passport callback function
         const existingUser = await User.findOne({ slackId : profile.id});
         if (existingUser) { //user already exists
             done(null, existingUser);
         }
+        if (profile.team.id !== authConfig.slackTeamId) {
+            // not apart of the workspace
+            done(null, {});
+        }
         else {  // create a new profile
             let isAdmin = false;
-            console.log("Admin emails are", adminEmails);
+            console.log("=== CHECKING ADMIN === > " + profile.user.email + " : " + authConfig.adminEmails);
             // check if this is an admin email address
-            if (adminEmails.includes(profile.user.email)) { 
+            if (authConfig.adminEmails.includes(profile.user.email)) { 
                 isAdmin = true;
             }
             const user = new User({
@@ -94,8 +102,6 @@ passport.use(
             }).save();
             done(null, user);
         }
-        console.log('accessToken', accessToken);
-        console.log('refreshToken', refreshToken);
-        console.log('profile', profile);
+
     }
 ));
