@@ -49,7 +49,7 @@ class PageList extends Component {
 
     saveList = () => {
         console.log(this.state.pages);
-        axios.post('/api/pages', {data: this.state.pages}).then((res) => {
+        axios.post('/api/pages/reorder', {data: this.state.pages}).then((res) => {
             console.log(res);
             // todo show some sort of confirmation that it was successfully saved
             this.setState({

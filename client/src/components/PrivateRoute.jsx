@@ -7,7 +7,8 @@ import {connect} from 'react-redux';
 
 class PrivateRoute extends Component {
 	render() {
-		console.log("this.props.auth in private route is", this.props.user);
+        console.log("=== RECEIVED AS PROPS ===");
+        console.log(this.props.user);
 		const Component = this.props.component;
 		return (
 			<Route exact={this.props.exact} path={this.props.path} render={(props) => {

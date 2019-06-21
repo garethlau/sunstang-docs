@@ -5,6 +5,11 @@ import {fetchPage} from '../actions';
 import pageViewerStyles from '../styles/pageViewerStyles.module.css';
 
 class PageNav extends Component {
+
+    switchPage = (pageId) => {
+        
+    };
+
     render() {
         let renderedTitles = [];
         return this.props.pages.map((page) => {
@@ -14,9 +19,9 @@ class PageNav extends Component {
                 renderedTitles.push(page.category);
 
                 return (
-                    <div>
-                    <div>{page.category.toUpperCase()}</div>
                     <div key={pageId}>
+                    <div>{page.category.toUpperCase()}</div>
+                    <div>
                         <button className={pageViewerStyles.titlesButton} onClick={() => {this.props.fetchPage(pageId)}}>
                             <p className={pageViewerStyles.pageTitles}>{page.title}</p>
                         </button>

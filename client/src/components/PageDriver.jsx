@@ -21,7 +21,7 @@ class PageDriver extends Component {
     };
 
     componentDidMount() {
-        this.props.fetchPage("defaultPage");
+        this.props.fetchPage("5ce28e5ba59c404a0cf2bd6c");
         // load the links to the buttons
         axios.get('/api/pages').then((res) => {
             console.log(res);
@@ -50,7 +50,6 @@ class PageDriver extends Component {
     };
 
     renderEditor = () => {
-        console.log("props content", this.props.page.content);
         if (this.props.page.content === undefined) {
             return (
                 <div style={{width: "65%"}}>
@@ -67,7 +66,8 @@ class PageDriver extends Component {
     }
 
 	render() {
-        console.log(this.props.page);
+        console.log("=== RECEIVED AS PROPS ===");
+        console.log(this.props);
         return(
             <div>
                 <div className={pageViewerStyles.viewerContainer}>

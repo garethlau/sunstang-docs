@@ -1,11 +1,24 @@
 // testing component
 import React from 'react';
+import {fetchPage} from '../actions';
+import {connect} from 'react-redux';
 
-const Test = () => {
-    return (
-        <div>
-            test
-        </div>
-    )
+class Test extends React.Component {
+    componentDidMount() {
+        this.props.fetchPage("");
+    }
+    render() {
+        
+        return (
+            <div>
+                hello
+            </div>
+        )
+    }
 }
-export default Test;
+function mapStateToProps(state) {
+    return ({
+        page: state.page
+    })
+}
+export default connect(mapStateToProps, {fetchPage})(Test);

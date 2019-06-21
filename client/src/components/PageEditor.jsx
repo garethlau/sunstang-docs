@@ -86,7 +86,7 @@ class PageEditor extends Component {
 			// a page id was provided in the url
 			const pageId = (this.props.location.pathname).split('/')[3];
 			console.log("Page id was provided: ", pageId);
-	        const path = "/api/page?pageId=" + pageId;
+	        const path = "/api/pages/page/" + pageId;
 	        axios.get(path).then((res) => {
 	        	console.log("res is", res);
 	        	console.log("res.data.content is", res.data.content);
@@ -104,7 +104,7 @@ class PageEditor extends Component {
 		}
 		else {
 			// new page
-			axios.get('/api/current-user').then((res) => {
+			axios.get('/api/user/current-user').then((res) => {
 				console.log("res is", res);
 				const authorId = res.data._id;
 				console.log("Author ID is: ", authorId);
@@ -213,15 +213,15 @@ class PageEditor extends Component {
 		// add a .then() here to notify that the page has been saved
 		// or redirect
 		let pageId = this.state.pageId;
-		let path;
-		if (pageId !== null) {
-			// no page id, this is a new page
-			path = "/api/page?pageId=" + pageId;
-		}
-		else {
-			// page already exists
-			path = "/api/page"
-		}
+        let path;
+        
+        // we have a page id
+        if (pageId !== null) {
+            path = "/api/pages/page/" + pageId;
+        }
+        else {
+            path = "/api/pages/page"
+        }
 		axios.post(path, page).then(res => {
 			console.log("res after axios.post", res);
 			this.props.history.push('/edit');
@@ -232,7 +232,7 @@ class PageEditor extends Component {
 
 	deletePage = () => {
 		const pageId = this.state.pageId;
-		let path = '/api/page?pageId=' + pageId;
+		let path = "/api/pages/" + pageId;
 		axios.delete(path).then(res => {
 			console.log("page deleted, response is ", res);
 			this.props.history.push('/edit');
