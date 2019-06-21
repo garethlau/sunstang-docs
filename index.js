@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
-
 const methodOverride = require('method-override');
 
 // method overdride? 
@@ -45,104 +44,13 @@ mongoose.connect(keys.mongoURI, {
     reconnectTries: 30, // keep an eye open for performance and security
     })
     .then(() => {
-        console.log("Successfully connected to mongo")
+        console.log("=== SUCCESSFULLY CONNECTED TO MONGO ===")
     })
-    .catch((err) => console.log("There was an error connecting to mongo", err));
+    .catch((err) => console.log("=== ERROR CONNECTING TO MONGO ===", err));
 
 
-/* Handle files */
-const multer = require('multer');
-const GridFsStorage = require('multer-gridfs-storage');
-const Grid = require('gridfs-stream');
-eval(`Grid.prototype.findOne = ${Grid.prototype.findOne.toString().replace('nextObject', 'next')}`);
-const crypto = require('crypto');
-const path = require('path');
-
-const conn = mongoose.connection;
-let gfs;
-conn.once('open', () => {
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('uploads');
-})
-
-const storage = new GridFsStorage({
-    db: conn,
-    file: (req, file) => {
-        return new Promise((resolve, reject) => {
-            crypto.randomBytes(16, (err, buf) => {
-              if (err) {
-                return reject(err);
-              }
-              const filename = buf.toString('hex') + path.extname(file.originalname);
-              const fileInfo = {
-                filename: filename,
-                bucketName: 'uploads'
-              };
-              resolve(fileInfo);
-            });
-          });
-    }
-});
-
-let upload = multer({storage: storage}).single("File");
 
 
-app.get('/api/file/download/:filename', (req, res) => {
-    // see if the files exists
-    console.log("Looking for " + req.params.filename);
-    gfs.findOne({filename: req.params.filename}, (err, file) => {
-        if (err) {console.log(err)}
-        else {
-            if (file) {
-                console.log("Found", file)
-                // create read stream
-                res.set('Content-Type', file.contentType);
-                res.set('Content-Disposition', 'attachment; filename="' + file.filename + '"');
-
-                const readStream = gfs.createReadStream(file.filename);
-                readStream.on("error", (err) => {
-                    console.log("read stream error", err);
-                    res.end();
-                });
-                readStream.pipe(res);
-            }
-            else {
-                console.log("Not found")
-                res.send({message: "File not found"});
-            }
-        }
-    });
-});
-
-app.post('/api/file/upload', (req, res) => {
-    upload(req, res, (err) => {
-        if (err instanceof multer.MulterError) {
-            // error with multer
-            console.log("Multer error uploading", err);
-            res.json({err: err});
-        }
-        else if (err) {
-            // uploading error
-            console.log("Error uploading", err);
-            res.json({err: err});
-        }
-        // good 
-        console.log("req.file", req.file);
-        res.json({file: req.file})
-    })
-})
-
-
-app.delete('/api/file/delete/:fileId', (req, res) => {
-    gfs.remove({_id: req.params.fileId, root: 'uploads'}, (err, gridStore) => {
-        if (err) {
-            return res.status(404).json({err: err});
-        }
-        else {
-            res.json({message: "Deleted"})
-        }
-    })
-})
 
 
 // set dynamic ports
