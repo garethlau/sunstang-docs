@@ -69,9 +69,6 @@ This app uses [Passport's Slack OAuth Strategy](http://www.passportjs.org/packag
 
 ``` javascript
 module.exports = {
-    // app no longer supports google auth
-    googleClientID: '', 
-    googleClientSecret: '', 
     slackClientID: 'YOURSLACKCLIENTID',
     slackClientSecret: 'YOURSLACKCLIENTSECRET',
     mongoURI: 'YOURMONGOURI',

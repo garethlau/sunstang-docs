@@ -60,14 +60,6 @@ passport.use(
 ));
 
 // slack strategy
-
-/*
-NOTE FOR SLACK AUTH
-Have to go to 'https://api.slack.com/apps' to change the redirect url between prod and dev
-IF PROD, use: https://sunstang-website.herokuapp.com/auth/slack/callback
-if DEV, use: http://localhost:3000/auth/slack/callback
-*/
-
 passport.use(
     new SlackStrategy({
         clientID: keys.slackClientID,
