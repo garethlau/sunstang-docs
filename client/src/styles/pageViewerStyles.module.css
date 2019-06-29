@@ -1,9 +1,31 @@
-.viewerContainer {
+.container { /* container that incldues the page and the list of titles */
     height: 100vh;
     width: 100%;
+    display: grid;
+    grid-template-columns: 7fr 3fr;
 }
-.titlesContainer {
-    position: fixed;
+.scroll {
+    overflow-y: scroll;
+}
+/* styles for the page */
+.pageContainer {
+    padding: 20px;
+    height: calc(100vh - 90px);
+}
+.titleContainer {   /* container for the title of the page */
+    border-width: 0 0 2px 0;
+    border-style: solid;
+    border-color: #707070;
+}
+.title {    /* styling for the title itself */
+    font-size: 3em;
+    font: arial;
+    margin-bottom: 0;
+    margin-top: 5px;
+}
+
+/* styles for the list of the page titles */
+.titlesContainer {  /* container for the titles list */
     top: 50px;
     right: 0;
     border-style: solid;
@@ -11,14 +33,10 @@
     border-color: #707070;
     background-color: #DADEE2; 
     padding: 0px 2.5% 0px 2.5%;
-    width: 20%;
-
     height: calc(100vh - 50px);
-    overflow: scroll;
-    overflow-x: hidden;
 
 }
-.titlesButton {
+.titlesButton { /* styling for the indiviudal titles in the list of titles */
     background-color: transparent;
     border: none;
     transition: color 0.3s;
@@ -36,10 +54,4 @@
 }
 .pageTitles {
     font-size: 1.2em;
-}
-.pageContainer {
-    float: left;
-    width: 100%;
-}
-.navContainer {
 }

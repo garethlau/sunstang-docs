@@ -1,32 +1,26 @@
-.buttonWrapper {
-  display: grid;
-}
-
 .button {
-  background: #333;
-  color: #ddd;
-  font-size: 18px;
-  border: 0;
-  padding-top: 5px;
-  vertical-align: bottom;
-  height: 34px;
-  width: 36px;
-  border-radius: 4px;
+    background: #333;
+    color: #ddd;
+    font-size: 18px;
+    border: 0;
+    vertical-align: bottom;
+    height: 50px;
+    width: 100%;
 }
 
 .button svg {
-  fill: #ddd;
+    fill: #ddd;
 }
 
 .button:hover, .button:focus {
-  background: #444;
-  outline: 0; /* reset for :focus */
+    background: #444;
+    outline: 0; /* reset for :focus */
 }
 
 .active {
-  color: #6a9cc9;
+    color:rgb(255, 165, 0);
 }
 
 .active svg {
-  fill: #6a9cc9;
+    fill: rgb(255, 165, 0);
 }

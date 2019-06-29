@@ -3,6 +3,8 @@ import React from 'react';
 import {fetchPage} from '../actions';
 import {connect} from 'react-redux';
 
+import FileDropZone from './FileDropZone';
+
 class Test extends React.Component {
     componentDidMount() {
         this.props.fetchPage("");
@@ -11,7 +13,7 @@ class Test extends React.Component {
         
         return (
             <div>
-                hello
+                <FileDropZone/>
             </div>
         )
     }

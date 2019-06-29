@@ -8,17 +8,17 @@ import {fetchPage} from '../actions';
 
 // import styling
 import pageViewerStyles from '../styles/pageViewerStyles.module.css';
-import ReadOnlyEditor from './ReadOnlyEditor';
 
 // import components
 import Loader from './Loader';
 import Header from './Header';  // not being used
-const PageNav = React.lazy(() => import('./PageNav'));  // lazy import
+import PageNav from './PageNav';
+import ReadOnlyEditor from './ReadOnlyEditor';
 
 class PageDriver extends Component {
     state = {
         isLoaded: false
-    };
+    }
 
     componentDidMount() {
         this.props.fetchPage("5ce28e5ba59c404a0cf2bd6c");
@@ -33,18 +33,15 @@ class PageDriver extends Component {
     }
 
     renderPageNav = () => {
-        if (this.state.isLoaded) {
-            // got the page titles
+        if (!this.state.isLoaded) {
             return (
-                <div class={pageViewerStyles.navContainer}>
-                    <h1>Pages</h1>
-                    <PageNav pages={this.state.pages}/>
-                </div>
+                <Loader size={40}/>
             )
         }
         else {
+            // got the page titles
             return (
-                <Loader size={40}/>
+                <PageNav pages={this.state.pages}/>
             )
         }
     };
@@ -52,9 +49,7 @@ class PageDriver extends Component {
     renderEditor = () => {
         if (this.props.page.content === undefined) {
             return (
-                <div style={{width: "65%"}}>
-                    <Loader/>
-                </div>
+                <Loader/>
             )
         }
         else {
@@ -68,20 +63,12 @@ class PageDriver extends Component {
 	render() {
         console.log("=== RECEIVED AS PROPS ===");
         console.log(this.props);
-        return(
-            <div>
-                <div className={pageViewerStyles.viewerContainer}>
-                    <div className={pageViewerStyles.pageContainer} >
-                        {this.renderEditor()}
-                    </div>
-                    <div className={pageViewerStyles.titlesContainer}>
-                        <Suspense fallback={<Loader/>}>
-                            {this.renderPageNav()}
-                        </Suspense>
-                    </div>
-                </div>
-            </div>
 
+        return (
+            <div className={pageViewerStyles.container}>
+                {this.renderEditor()}
+                {this.renderPageNav()}
+            </div>
         )
     }
 }

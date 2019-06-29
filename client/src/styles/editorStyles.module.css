@@ -1,54 +1,107 @@
 .editorContainer {
-    width: 65%;
     background: #fefefe;
-    padding: 10px 5% 20px 5%;
     height: calc(100vh - 50px);
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    grid-template-rows: minmax(calc(100vh - 50px), calc(100vh - 50px));
+    overflow: hidden;
 }
 .titleContainer {
-  border-width: 0 0 2px 0;
-  border-style: solid;
-  border-color: #707070;
+    border-width: 0 0 2px 0;
+    border-style: solid;
+    border-color: #707070;
 }
 .title { 
-  font-size: 3em;
-  font: arial;
-  margin-bottom: 0;
-  margin-top: 5px;
+    font-size: 3em;
+    font: arial;
+    margin-bottom: 0;
+    margin-top: 5px;
 }
 .editTitle {
-  background: transparent;
-  padding: 0;
-  border: none;
+    background: transparent;
+    padding: 0;
+    border: none;
 }
 .editTitle:focus {
   outline: none;
 }
 
 .editor {
-  cursor: text;
-  border-radius: 2px;
-  margin-bottom: 2em;
+    cursor: text;
+    padding: 10px 5% 20px 5%;
+}
+.scroll {
+    overflow-y: scroll;
+}
+.toolbarContainer {
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+}
+.toolbar {
+    top: 100px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 80%;
+}
+.uploadBtnWrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+}
+.uploadBtn {
+    border: none;
+    color:#ddd;
+    background-color: #333;
+    padding: 8px 20px;
+    border-radius: 6px;
+    margin-top: 10px;
+    width: 100%;
+}
+.uploadBtn:hover {
+    background-color: #444;
+}
+.uploadBtnWrapper input[type='file'] {
+    opacity: 0;
+    margin-top: 10px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+.commitBtn {
+    border: none;
+    color:#ddd;
+    background-color: #333;
+    padding: 8px 20px;
+    border-radius: 6px;
+    margin-top: 10px;
+    width: 48%;
+}
+.commitBtn:hover {
+    background-color: #444;
 }
 blockquote {
-  font-size: 4em;
-  font-family: 'Hoefler Text', Georgia, serif;
-  font-style: italic;
-  text-align: center;
+    font-size: 4em;
+    font-family: 'Hoefler Text', Georgia, serif;
+    font-style: italic;
+    text-align: center;
 }
 pre {
-  border-style: solid;
-  border-width: 2px;
-  border-color: #707070;
-  padding: 5px 2px 5px 2px;
-  margin-top: 0;
-  margin-bottom: 0;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #707070;
+    padding: 5px 2px 5px 2px;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 pre > pre {
-  border: none !important;
+    border: none !important;
 }
 
 .public-DraftStyleDefault-ol {
-  color: green;
+    color: green;
 }
 
 .editor :global(.public-DraftEditor-content) {

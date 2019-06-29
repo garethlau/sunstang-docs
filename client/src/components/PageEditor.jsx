@@ -170,7 +170,11 @@ class PageEditor extends Component {
 		this.editor.focus();
 	};
 	fileHandler = (event) => {
-		let file = event.target.files[0];
+        let file = event.target.files[0];
+        // check if an image needs to be uppploaded
+        if (file == null || file === undefined ) {
+            return;
+        }
 		const reader = new FileReader();
 		reader.readAsDataURL(file);
 		reader.onload = () => {
@@ -269,11 +273,11 @@ class PageEditor extends Component {
 	renderContent = () => {
 		if (this.state.isLoaded) {
 			return(
-				<div className={editorStyles.editorContainer} style={{overflow: "scroll"}}>
-					<div className={editorStyles.titleContainer}>
-						<input type={"text"} placeholder={"Page Title"} value={this.state.pageTitle} onChange={this.onTitleChange} className={`${editorStyles.title} ${editorStyles.editTitle}`}/>
-					</div>
+				<div className={editorStyles.editorContainer}>
 					<div onClick={this.focus} className={`${editorStyles.editor} ${editorStyles.scroll}`}>
+                        <div className={editorStyles.titleContainer}>
+                            <input type={"text"} placeholder={"Page Title"} value={this.state.pageTitle} onChange={this.onTitleChange} className={`${editorStyles.title} ${editorStyles.editTitle}`}/>
+                        </div>
 						<Editor
 							editorState={this.state.editorState}
 							onChange={this.onChange}
@@ -282,32 +286,42 @@ class PageEditor extends Component {
 							blockStlyeFn={this.blockStyle}
 							handleKeyCommand={this.handleKeyCommand}
 						/>
+                        					<AlignmentTool/>
+
 					</div>
-					<AlignmentTool/>
-					<div style={{position: "absolute", top: "100px", right: "20%", width: "38px"}}>
-						<Toolbar>
-							{
-								// may be use React.Fragment instead of div to improve perfomance after React 16
-								(externalProps) => (
-									<div>
-										<BoldButton {...externalProps} />
-										<ItalicButton {...externalProps} />
-										<UnderlineButton {...externalProps} />
-										<HeadlineOneButton {...externalProps} />
-										<UnorderedListButton {...externalProps} />
-										<OrderedListButton {...externalProps} />
-										<BlockquoteButton {...externalProps} />
-										<CodeBlockButton {...externalProps} />
-									</div>
-								)
-							}
-						</Toolbar>
-						<div>
-							<input type="file" name="file" accept="image/*" onChange={this.fileHandler}/>
-						</div>
-						<button onClick={this.savePage}>Save</button>
-						<button onClick={this.deletePage}>Delete this page</button>
-					</div>
+
+                    <div className={editorStyles.toolbarContainer}>
+                        <div>
+                        </div>
+                        <div className={editorStyles.toolbar}>
+                            <Toolbar>
+                                {
+                                    // may be use React.Fragment instead of div to improve perfomance after React 16
+                                    (externalProps) => (
+                                        <div>
+                                            <BoldButton {...externalProps} />
+                                            <ItalicButton {...externalProps} />
+                                            <UnderlineButton {...externalProps} />
+                                            <HeadlineOneButton {...externalProps} />
+                                            <UnorderedListButton {...externalProps} />
+                                            <OrderedListButton {...externalProps} />
+                                            <BlockquoteButton {...externalProps} />
+                                            <CodeBlockButton {...externalProps} />
+                                        </div>
+                                    )
+                                }
+                            </Toolbar>
+                            <div className={editorStyles.uploadBtnWrapper}>
+                                    <button class={editorStyles.uploadBtn}>Upload an Image</button>
+                                    <input type="file" name="file" accept="image" onChange={this.fileHandler}/>
+                            </div>
+                            <button className={editorStyles.commitBtn} onClick={this.savePage}>Save</button>
+                            <button className={editorStyles.commitBtn} style={{float: "right"}} onClick={this.deletePage}>Delete this page</button>
+                        </div>
+
+                    </div>
+
+
 					
 				</div>
 			);

@@ -10,7 +10,7 @@ class PageNav extends Component {
         
     };
 
-    render() {
+    renderTitlesList() {
         let renderedTitles = [];
         return this.props.pages.map((page) => {
             // let path = '/docs/page/' + page._id;
@@ -39,6 +39,15 @@ class PageNav extends Component {
                 )
             }
         })
+    }
+
+    render() {
+        return (
+            <div className={`${pageViewerStyles.titlesContainer} ${pageViewerStyles.scroll}`}>
+                <h1>Pages</h1>
+                {this.renderTitlesList()}
+            </div>
+        )
     }
 }
 
