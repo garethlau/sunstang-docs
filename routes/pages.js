@@ -104,4 +104,20 @@ router.post('/reorder', (req, res) => {
     });
 });
 
+// add file references to a page
+router.post('/link/:pageId', (req, res) => {
+    const pageId = req.params.pageId;
+    const fileNamesToLink = req.body.data;  // array of filenames
+    console.log("LINKING FILES: ", fileNamesToLink);
+    Page.findById(pageId).then((page) => {
+        page.files = fileNamesToLink;
+        page.save().then(() => {
+            res.status(statusCodes.OK).send(page);
+        });
+    }).catch((err) => {
+        console.log("ERR");
+        console.log(err);
+    });
+})
+
 module.exports = router;

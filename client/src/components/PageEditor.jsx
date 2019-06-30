@@ -38,7 +38,7 @@ import Login from './Login';
 import Loader from './Loader';
 import Header from './Header';
 import PopupBanner from './PopupBanner';
-
+import FileDropZone from './FileDropZone';
 
 // plugin config
 const toolbarPlugin = createToolbarPlugin({
@@ -77,7 +77,8 @@ class PageEditor extends Component {
 		editorState: createEditorStateWithText(text),
 		pageTitle: "",
 		pageId: null,
-		isLoaded: false,
+        isLoaded: false,
+        filenames: [],  // filenames for this page
 		isDisconnected: false
 	};
 	componentDidMount() {
@@ -95,7 +96,8 @@ class PageEditor extends Component {
 				        pageTitle: res.data.title,
 				        authorId: res.data.authorId,
 				        editorState: EditorState.push(this.state.editorState, convertFromRaw(JSON.parse(res.data.content)), 'change-block-data'),
-						pageId: res.data._id,
+                        pageId: res.data._id,
+                        filenames: res.data.files,
 						isLoaded: true,
 			        });
 				}
@@ -114,7 +116,7 @@ class PageEditor extends Component {
 						isLoaded: true,
 					})
 				}
-			})
+            })
 		}
 		this.handleConnectionChange();	// check the connection once on load
 		// subscribe to connection change events
@@ -286,12 +288,12 @@ class PageEditor extends Component {
 							blockStlyeFn={this.blockStyle}
 							handleKeyCommand={this.handleKeyCommand}
 						/>
-                        					<AlignmentTool/>
-
+                        <AlignmentTool/>
 					</div>
 
                     <div className={editorStyles.toolbarContainer}>
-                        <div>
+                        <div className={editorStyles.fileZone}>
+                            <FileDropZone pageId={this.state.pageId} filenames={this.state.filenames}/>
                         </div>
                         <div className={editorStyles.toolbar}>
                             <Toolbar>

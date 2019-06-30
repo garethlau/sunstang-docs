@@ -13,7 +13,6 @@ class Test extends React.Component {
         
         return (
             <div>
-                <FileDropZone/>
             </div>
         )
     }

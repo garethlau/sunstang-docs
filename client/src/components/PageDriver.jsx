@@ -14,6 +14,7 @@ import Loader from './Loader';
 import Header from './Header';  // not being used
 import PageNav from './PageNav';
 import ReadOnlyEditor from './ReadOnlyEditor';
+import FileZone from './FileZone';
 
 class PageDriver extends Component {
     state = {
@@ -48,6 +49,8 @@ class PageDriver extends Component {
 
     renderEditor = () => {
         if (this.props.page.content === undefined) {
+            // TODO
+            // make it so that this loader also takes up 2 rows
             return (
                 <Loader/>
             )
@@ -60,6 +63,19 @@ class PageDriver extends Component {
         }
     }
 
+    renderFileZone = () => {
+        if (this.props.page.content === undefined) {
+            return (
+                <Loader/>
+            )
+        }
+        else {
+            return (
+                <FileZone files={this.props.page.files}/>
+            )
+        }
+    }
+
 	render() {
         console.log("=== RECEIVED AS PROPS ===");
         console.log(this.props);
@@ -68,6 +84,7 @@ class PageDriver extends Component {
             <div className={pageViewerStyles.container}>
                 {this.renderEditor()}
                 {this.renderPageNav()}
+                {this.renderFileZone()}
             </div>
         )
     }

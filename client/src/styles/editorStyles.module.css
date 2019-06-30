@@ -33,15 +33,22 @@
 .scroll {
     overflow-y: scroll;
 }
+/* contains files and styling tools */
 .toolbarContainer {
     display: grid;
     grid-template-rows: 2fr 1fr;
 }
+/* files */
+.fileZone {
+    background-color: red;
+}
+/* buttons to save page and change styles */
 .toolbar {
     top: 100px;
     margin-right: auto;
     margin-left: auto;
     width: 80%;
+    padding-top: 30px;
 }
 .uploadBtnWrapper {
     position: relative;
