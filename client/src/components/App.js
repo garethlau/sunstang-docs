@@ -21,6 +21,7 @@ import PageDriver from './PageDriver';
 // doc edditor components
 import EditPagesDriver from './EditPagesDriver';
 import PageEditor from './PageEditor';
+import Placeholder from './Placeholder';
 
 import Test from './Test';
 
@@ -44,11 +45,14 @@ class App extends Component {
                 <Router>
                     <NavBar/>
                     <>
-                        <Route exact path="/" component={Landing}/>
+                        <Route exact path="/" component={Placeholder}/>
+                        <Route path="/about" component={Placeholder}/>
+                        <Route path="/the-races" component={Placeholder}/>
+                        <Route path="/blog" component={Placeholder}/>
+                        <Route path="/sponsors" component={Placeholder}/>
                         <Route exact={true} path="/login" component={Login}/>
 
                         <Route path="/public" component={Public}/>
-                        <Route path="/log" component={Log}/>
                         <PrivateRoute path="/protected" component={Protected}/>
 
                         <Route exact={true}  path="/docs" component={PageDriver} />
