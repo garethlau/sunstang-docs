@@ -1,0 +1,78 @@
+/*
+These styles are used in page editor for the delete confirmation
+popup
+*/
+
+.background {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+.container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+.modal {
+    width: 500px;
+    height: 200px;
+    margin-left: -250px;
+    margin-top: -100px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+.contentContainer {
+
+}
+.textContainer {
+
+}
+.textContainer>h3 {
+    margin-left: 20px;
+}
+.buttonContainer {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 500px;
+}
+.btn {
+    border: none;
+    color: white;
+    border-radius: 3px;
+    margin-left: 5px;
+    margin-right: 5px;
+    transition: box-shadow .3s;
+}
+.btn:hover {
+    box-shadow: 0 0 11px rgba(33,33,33,.2); 
+}
+.primary {
+    background: rgb(255, 165, 0);
+}
+.secondary {
+    background: #444;
+}
+.btnLabel {
+    float: left;
+    padding-left: 10px;
+}
+.btnLabel > p {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.icon {
+    float: right;
+    padding-top: 5px;
+    padding-left: 10px;
+}
+.closeBtn {
+    float: right;
+}
+.deleteBtn {
+    float: right;
+}

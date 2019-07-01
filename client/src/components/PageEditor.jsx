@@ -31,6 +31,7 @@ import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin';
 import editorStyles from '../styles/editorStyles.module.css';
 import buttonStyles from '../styles/buttonStyles.module.css';
 import toolbarStyles from '../styles/toolbarStyles.module.css';
+import popupModalStyles from '../styles/popupModalStyles.module.css';
 import 'draft-js-alignment-plugin/lib/plugin.css';
 
 // components
@@ -79,7 +80,9 @@ class PageEditor extends Component {
 		pageId: null,
         isLoaded: false,
         filenames: [],  // filenames for this page
-		isDisconnected: false
+        isDisconnected: false,
+        showConnectionPopup: false,
+        showModal: false,
 	};
 	componentDidMount() {
 		this._isMounted = true;
@@ -238,7 +241,7 @@ class PageEditor extends Component {
 
 	deletePage = () => {
 		const pageId = this.state.pageId;
-		let path = "/api/pages/" + pageId;
+		let path = "/api/pages/page/" + pageId;
 		axios.delete(path).then(res => {
 			console.log("page deleted, response is ", res);
 			this.props.history.push('/edit');
@@ -271,6 +274,7 @@ class PageEditor extends Component {
                 )
             }
         }
+
     }
 
     renderFileZone = () => {
@@ -288,6 +292,55 @@ class PageEditor extends Component {
                     <p>Please save the page before adding fiels</p>                
                 </div>
             )
+        }
+    }
+
+    renderModal = () => {
+        if (this.state.showModal) {
+            return (
+                <div className={popupModalStyles.background} onClick={() => {this.setState({showModal: false})}}>
+                    <div className={popupModalStyles.container}>
+                        <div className={popupModalStyles.modal}>
+                            <div className={popupModalStyles.contentContainer}>
+                                <div className={popupModalStyles.textContainer}>
+                                    <h3>Are you sure you want to delete this page?</h3>
+                                </div>
+                                <div className={popupModalStyles.buttonContainer}>
+                                    <div className={popupModalStyles.deleteBtn}>
+                                        <button onClick={this.deletePage} className={`${popupModalStyles.btn} ${popupModalStyles.primary}`}>
+                                            <div className={popupModalStyles.btnLabel}>
+                                                <p>Yes, delete this page.</p>
+                                            </div>
+                                            <div className={popupModalStyles.icon}>
+                                                <i class="material-icons">
+                                                    delete
+                                                </i>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div className={popupModalStyles.closeBtn}>
+                                        <button onClick={() => {this.setState({showModal: false})}} className={`${popupModalStyles.btn} ${popupModalStyles.secondary}`}>
+                                            <div className={popupModalStyles.btnLabel}>
+                                                <p>No, go back.</p>
+                                            </div>
+                                            <div className={popupModalStyles.icon}>
+                                                <i class="material-icons">
+                                                    cancel
+                                                </i>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+        else {
+            return (<> </>)
         }
     }
 
@@ -336,7 +389,7 @@ class PageEditor extends Component {
                                     <input type="file" name="file" accept="image" onChange={this.fileHandler}/>
                             </div>
                             <button className={editorStyles.commitBtn} onClick={this.savePage}>Save</button>
-                            <button className={editorStyles.commitBtn} style={{float: "right"}} onClick={this.deletePage}>Delete this page</button>
+                            <button className={editorStyles.commitBtn} onClick={() => {this.setState({showModal: true})}} style={{float: "right"}}>Delete this page</button>
                         </div>
 
                     </div>
@@ -358,8 +411,9 @@ class PageEditor extends Component {
 	render() {
 		return (
 			<div>
+                {this.renderModal()}
 				{this.renderPopup()}
-				{this.renderContent()}
+                {this.renderContent()}
 			</div>
 		)
 	}
