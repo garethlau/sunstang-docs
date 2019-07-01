@@ -6,6 +6,8 @@ Online rich text editing and document managing solution built for Sunstang. Buil
 - [redux](https://redux.js.org/ "https://redux.js.org/")
 - [react-beautiful-dnd](https://www.npmjs.com/package/react-beautiful-dnd "https://www.npmjs.com/package/react-beautiful-dnd")
 - [draft-js](https://draftjs.org/ "https://draftjs.org/") (and many plugins for draft-js)
+- [gridfs-stream](https://www.npmjs.com/package/gridfs-stream "https://www.npmjs.com/package/gridfs-stream")
+- [multer](https://www.npmjs.com/package/multer " https://www.npmjs.com/package/multer") and [multer-gridfs-storage](https://www.npmjs.com/package/multer-gridfs-storage "https://www.npmjs.com/package/multer-gridfs-storage")
 
 # Contributing to the Project
 There's a lot of stuff that can be worked on. Feel free to pull this project and add to it!
@@ -62,7 +64,7 @@ For now, there will just be a happy mix of functional and class based components
 Google and Slack oauth using [Passport.js](http://www.passportjs.org/ "http://www.passportjs.org/"). All authentication logic can be found in `/routes/authRoutes.js`. For Google or Slack oauth to work, you will need to obtain a clientID and clientSecret. <b>I will add more links later.</b>
 
 ## APIs
-All found in `/routes/apiRoutes.js`.
+API paths can be found in `routes/index.js`
 
 ## Auth
 This app uses [Passport's Slack OAuth Strategy](http://www.passportjs.org/packages/passport-slack-oauth2/). You will have to generate your own Slack app credentials and enter them into `/config/dev.js`:
@@ -87,10 +89,8 @@ In either case, like with Slack credentials, your MLab credentials have to be pa
 # What's left?
 - Editting conflicts
 - Edit history
-- Page deletion protection
 - Code styling based on language
 - Keyboard shortcuts for styles
-- File hosting
 - Mentions
 - Hashtags
 - Creating an effective search system
