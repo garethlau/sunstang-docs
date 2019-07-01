@@ -3,7 +3,6 @@ import React from 'react';
 import {fetchPage} from '../actions';
 import {connect} from 'react-redux';
 
-import FileDropZone from './FileDropZone';
 
 class Test extends React.Component {
     componentDidMount() {
@@ -12,8 +11,7 @@ class Test extends React.Component {
     render() {
         
         return (
-            <div>
-            </div>
+            <></>
         )
     }
 }

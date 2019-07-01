@@ -1,11 +1,29 @@
+.bannerContainer {
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    left: 0;
+}
+.textContainer {
+    float: left;
+}
+.textStyle {
+    padding-top: 10px;
+    padding-left: 30px;
+    margin-top: 0;
+}
+.iconContainer {
+    float: right;
+    padding: 7px 30px 0 0;
+}
 .slide {
     position: absolute;
     -webkit-animation: slide 2.5s forwards;
     -webkit-animation-delay: 0s;
     animation: slide 2.5s forwards;
     animation-delay: 0s;
-    width: 100%;
     top: -40px;
+    width: 100%;
 }
 @-webkit-keyframes slide {
     0% {top: -40px;}
