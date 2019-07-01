@@ -120,4 +120,27 @@ router.post('/link/:pageId', (req, res) => {
     });
 })
 
+// unlink a file from a page
+router.post('/unlink/:pageId', (req, res) => {
+    const pageId = req.params.pageId;
+    const filename = req.query.filename;
+    console.log("QUERY", req.query);
+    console.log("=== UNLINKING FILE ", filename)
+    Page.findById(pageId).then((page) => {
+        console.log("FOUND PAGE")
+        console.log(page)
+        filesArray = page.files;
+        for (let i = 0; i < filesArray.length; i++) {
+            if (filesArray[i].filename == filename) {
+                filesArray.splice(i, 1);
+            }
+        }
+        page.files = filesArray;
+        console.log("SAVING")
+        page.save().then(() => {
+            res.status(statusCodes.OK).send(page);
+        });
+    })
+})
+
 module.exports = router;

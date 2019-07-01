@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 
+import fileListStyles from '../styles/fileListStyles.module.css';
+
 const FileZone = (props) => {
     let {files} = props;
 
@@ -15,9 +17,18 @@ const FileZone = (props) => {
         else {
             return files.map(filename => {
                 return (
-                    <li>
-                        <button onClick={() => downloadFile(filename)}>{filename.originalname}</button>
-                    </li>
+                    <div style={{}}>
+                        <button onClick={() => downloadFile(filename)} className={fileListStyles.fileBtn}>
+                            <div className={fileListStyles.fileBtnName}>
+                                {filename.originalname}
+                            </div>
+                            <div className={fileListStyles.fileBtnIcon}>
+                                <i class="material-icons">
+                                    cloud_download
+                                </i>
+                            </div>
+                        </button>
+                    </div>
                 )
             })
         }
@@ -36,11 +47,11 @@ const FileZone = (props) => {
     }
 
     return (
-        <div style={{backgroundColor: "red", padding: "0 2.5% 0 2.5%"}}>
-            <h1>Files</h1>
-            <ul>
+        <div className={fileListStyles.fileListContainer}>
+            <h1 >Files</h1>
+            <div style={{height: "100%"}}>
                 {renderFilenamesList()}
-            </ul>
+            </div>
         </div>
     )
 }

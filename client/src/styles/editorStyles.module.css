@@ -40,15 +40,18 @@
 }
 /* files */
 .fileZone {
+    /*
     background-color: red;
+    */
 }
 /* buttons to save page and change styles */
 .toolbar {
     top: 100px;
-    margin-right: auto;
-    margin-left: auto;
-    width: 80%;
+    margin-right: 20px;
+    margin-left: 20px;
+    width: auto;
     padding-top: 30px;
+    height: 100%;
 }
 .uploadBtnWrapper {
     position: relative;

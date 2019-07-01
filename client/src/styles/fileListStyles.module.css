@@ -1,0 +1,37 @@
+.fileListContainer {
+    padding: 0 2.5% 0 2.5%;
+    overflow-y: scroll;
+    background-color: #DADEE2; 
+}
+.fileListContainer>h1 {
+    margin-bottom: 0;
+}
+.fileBtn {
+    width: 100%;
+    border: none;
+    border-radius: 3px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: white;
+    transition: box-shadow .3s;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+.fileBtn:hover {
+    box-shadow: 0 0 11px rgba(33,33,33,.2); 
+    cursor: pointer;
+}
+.fileBtnName {
+    float: left;
+    padding: 10px 5px 10px 5px;
+    font-size: 1.2em;
+    width: 80%;
+    text-align: left;
+}
+.fileBtnIcon {
+    float: right;
+    padding-top: 7px;
+    padding-right: 10px;
+    background-color: white;
+    padding-left: 15px;
+}

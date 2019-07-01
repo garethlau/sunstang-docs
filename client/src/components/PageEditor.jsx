@@ -272,6 +272,25 @@ class PageEditor extends Component {
             }
         }
     }
+
+    renderFileZone = () => {
+        if (this.state.pageId) {
+            // we have a page id
+            return (
+                <div className={editorStyles.fileZone}>
+                    <FileDropZone pageId={this.state.pageId} filenames={this.state.filenames}/>
+                </div>
+            )
+        }
+        else {
+            return (
+                <div className={editorStyles.fileZone}>
+                    <p>Please save the page before adding fiels</p>                
+                </div>
+            )
+        }
+    }
+
 	renderContent = () => {
 		if (this.state.isLoaded) {
 			return(
@@ -291,10 +310,9 @@ class PageEditor extends Component {
                         <AlignmentTool/>
 					</div>
 
-                    <div className={editorStyles.toolbarContainer}>
-                        <div className={editorStyles.fileZone}>
-                            <FileDropZone pageId={this.state.pageId} filenames={this.state.filenames}/>
-                        </div>
+                    <div className={`${ editorStyles.toolbarContainer} ${editorStyles.scroll}`}>
+                        {this.renderFileZone()}
+
                         <div className={editorStyles.toolbar}>
                             <Toolbar>
                                 {

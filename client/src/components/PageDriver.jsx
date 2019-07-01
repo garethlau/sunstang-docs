@@ -14,7 +14,7 @@ import Loader from './Loader';
 import Header from './Header';  // not being used
 import PageNav from './PageNav';
 import ReadOnlyEditor from './ReadOnlyEditor';
-import FileZone from './FileZone';
+import FileList from './FileList';
 
 class PageDriver extends Component {
     state = {
@@ -71,7 +71,7 @@ class PageDriver extends Component {
         }
         else {
             return (
-                <FileZone files={this.props.page.files}/>
+                <FileList files={this.props.page.files}/>
             )
         }
     }

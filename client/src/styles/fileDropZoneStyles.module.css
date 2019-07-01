@@ -1,0 +1,63 @@
+.container {
+    padding: 20px;
+}
+.dropZone {
+    border: 1px dashed black;
+    padding: 30px;
+    text-align: center;
+    margin: 5px;
+}
+.dropZone:hover {
+    cursor: pointer;
+}
+.dropZone>input:focus {
+    outline: none !important;
+}
+
+.removeAllBtn {
+
+}
+.buttonText {
+   margin: 10px;
+   font-size: 1.2em;
+   float: left; 
+}
+.actionBtn {
+    background: #444;
+    border: none;
+    color: white;
+    border-radius: 3px;
+    margin: 5px;
+}
+
+.filesContainer {
+
+}
+.fileContainer {
+    width: 100%;
+}
+.filename {
+    float: left;
+    width: 80%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.btnContainer {
+    float: right;
+    padding-top: 7px;
+
+}
+.downloadBtn {
+    border: none;
+    background: none;
+}
+.downloadBtn:hover {
+    cursor: pointer;
+}
+.deleteBtn {
+    border: none;
+    background: none;
+}
+.deleteBtn:hover {
+    cursor: pointer;
+}

@@ -4,21 +4,16 @@ import axios from 'axios';
 import PopupBanner from './PopupBanner';
 import fileDownload from 'js-file-download';
 
+import fileDropZoneStyles from '../styles/fileDropZoneStyles.module.css';
+
 const FileDropZone = (props) => {
     console.log("PROPS IN FILEDROPZONE")
     console.log(props);
-    const {pageId, filenames} = props;
-    if (pageId != null) {
-        // we're editting an aready existing page
-        
-    }
-    else {
-        // this is a new page so we have no id
-        // show an error message saying you have to have a saved page first
-    }
-
+    
     const [doneUpload, setDoneUpload] = useState(false);
     const [myFiles, setMyFiles] = useState([]);
+    const [filenames, setFilenames] = useState(props.filenames)
+    const {pageId} = props;
 
     console.log("myfiles", myFiles);
 
@@ -57,22 +52,20 @@ const FileDropZone = (props) => {
             });
 
             filenames.forEach(filename => {
-                filenamesToLink.push(filename);
+                filenamesToLink.push(filename);                
             });
             // now link the filenames to the page
             const path = '/api/pages/link/' + pageId;
-            console.log("calling: " + path)
             axios.post(path, {
                 data: filenamesToLink
             }).then((res) => {
-                console.log("res in link");
                 console.log(res);
             }).catch((err) => {
                 console.log(err);
             })
             setDoneUpload(true);
-            setMyFiles([]);
-
+            setMyFiles([]); // redundent clearing of files
+            setFilenames(filenamesToLink);  // rerender the file names to display
             setTimeout(() => {
                 setDoneUpload(false);
             }, 3000);
@@ -83,7 +76,6 @@ const FileDropZone = (props) => {
     }
 
     const sendRequest = (file) => {
-        console.log("sendRequest", file);
         return new Promise((resolve, reject) => {
             const data = new FormData();
             data.append('File', file);
@@ -105,19 +97,50 @@ const FileDropZone = (props) => {
     }
 
     const files = myFiles.map(file => (
-        <li key={file.path}>
-            {file.path} - {file.size} bytes{" "}
-            <button onClick={removeFile(file)}>Remove File</button>
-        </li>
+        <div key={file.path} className={fileDropZoneStyles.fileContainer}> 
+            <div className={fileDropZoneStyles.filename}>
+                {file.path} - {file.size} bytes{" "}
+            </div>
+            <div className={fileDropZoneStyles.btnContainer}>
+                <button onClick={removeFile(file)} className={fileDropZoneStyles.deleteBtn}>
+                    <i class="material-icons">
+                        delete
+                    </i>
+                </button>
+            </div>
+        </div>
     ))
+
+    const unlinkFile = (filenameObj) => {
+        // console.log("=== UNLINKING FILE === > ", filenameObj);
+        const path = '/api/pages/unlink/' + pageId + "?filename=" + filenameObj.filename;
+        axios.post(path).then((res) => {
+            setFilenames(res.data.files);
+        });
+    }
 
     const renderFilenamesList = () => {
         // return a link, when they click the link it should fetch the file
         return filenames.map(filename => {
             return (
-                <li>
-                    <button onClick={() => downloadFile(filename)}>{filename.originalname}</button>
-                </li>
+                <div className={fileDropZoneStyles.fileContainer}>
+                    <div className={fileDropZoneStyles.filename}>
+                        {filename.originalname}
+                    </div>
+                    <div className={fileDropZoneStyles.btnContainer}>
+                        <button onClick={() => downloadFile(filename)} className={fileDropZoneStyles.downloadBtn}>
+                            <i class="material-icons">
+                                cloud_download
+                            </i>
+                        </button>
+                        <button onClick={() => unlinkFile(filename)} className={fileDropZoneStyles.deleteBtn}>
+                            <i class="material-icons">
+                                delete
+                            </i>
+                        </button>
+                    </div>
+
+                </div>
             )
         })
     }
@@ -139,26 +162,52 @@ const FileDropZone = (props) => {
             return (<PopupBanner status={'success'} message={'Successfully uploaded'}/>)
         }
     }
-
+ 
     return (
         <>
             {renderPopup()}
-            <section className="">
+            <div className={`${fileDropZoneStyles.container}`}>
+                <h1>Upload Files</h1>
                 <div {...getRootProps({ className: "dropzone" })}>
-                    <input {...getInputProps()} />
-                    <p>Drag 'n' drop some files here, or click to select files</p>
+                    <div className={fileDropZoneStyles.dropZone}>
+                        <input {...getInputProps()} />
+                        <p>Drop files here, or click to select files</p>
+                    </div>
                 </div>
                 <aside>
-                    <h4>Files</h4>
-                    <ul>{files}</ul>
+                    {files.length > 0 && <h3 style={{marginBottom: "0"}}>Files: </h3>}
+                    <div>{files}</div>
                 </aside>
-                {files.length > 0 && <button onClick={removeAll}>Remove All</button>}
-                <input type="submit" value="upload" onClick={uploadFiles}/>
-                <ul>
+                {
+                    files.length > 0 &&
+                    <button  onClick={uploadFiles} className={fileDropZoneStyles.actionBtn}>
+                        <div className={fileDropZoneStyles.buttonText}>
+                            Upload
+                        </div>
+                        <i class="material-icons" style={{padding: "5px 10px 0px 5px"}}>
+                            cloud_upload
+                        </i>
+                    </button>
+                }
+                {
+                    files.length > 0 && 
+                    <button onClick={removeAll} className={fileDropZoneStyles.actionBtn}>
+                        <div className={fileDropZoneStyles.buttonText}>
+                            Remove All    
+                        </div> 
+                        <i class="material-icons" style={{padding: "5px 10px 0px 5px"}}>
+                            delete
+                        </i>
+                    </button>
+                }
+                <div className={fileDropZoneStyles.filesContainer}>
+                    <h1>Attached Files</h1>
                     {renderFilenamesList()}
-                </ul>
-            </section>
+                </div>
+            </div>
         </>
     )
+
+
 }
 export default FileDropZone;
